@@ -90,6 +90,7 @@ command = Command(
     name="ping",
     handler=handler,
     description="Replies with pong.",
+    required_roles=["mod"]
 )
 ```
 
