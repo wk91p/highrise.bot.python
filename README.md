@@ -2,7 +2,7 @@
 
 Unofficial Python SDK for [Highrise Virtual Reality](https://highrise.game)
 
-1:1 with the official SDK on every core method, plus a set of tools it doesn't have: live room caching, uptime/latency/event_processed metrics, background loops, a dynamic command system with role-based permissions, local role persistence, auto message splitting, pause/resume, config-driven setup, a public web API client, and pagination support across the board.
+1:1 with the official SDK on every core method, plus a set of tools it doesn't have: live room caching, uptime/latency/event_processed metrics, background loops, a dynamic command system with role-based permissions, local role persistence, auto message splitting, pause/resume, config-driven setup, a public WebApi client, and pagination support across the board using `async for-in` loop.
 
 > [!NOTE]
 > **Coming from the official SDK?** A few event hooks changed shape (`on_moderate`, `on_message`, `on_tip`, `on_user_move`) and `Message` is now a class with helper methods instead of a plain string. See the [Migrating from the official SDK](#migrating-from-the-official-sdk) section below before porting an existing bot.
@@ -120,14 +120,6 @@ config = BotConfig(
 )
 
 bot = MyBot(config)
-```
-
-## HttpClient
-
-A small, reusable async HTTP wrapper built on `httpx`. Powers `WebApi`, but usable on its own for any REST API.
-
-```python
-from highrise import HttpClient
 ```
 
 ## WebApi
