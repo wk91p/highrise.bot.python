@@ -144,6 +144,38 @@ if response.ok:
 
 A narrow, correctness-first cache. Only data the bot exclusively controls (like its own outfit) is cached, anything that can change from outside the bot is always fetched live.
 
+## Awaiter
+
+Wait for a specific event to happen, with filtering, timeout, and multi-result support built in. No manual state tracking, no juggling flags between hooks.
+
+```python
+results = await bot.awaiter.chat(
+    filter_fn=lambda u, m: u.id == target_id,
+    timeout=30,
+)
+
+if results:
+    user, message = results[0]
+```
+
+| Method | Waits for | Returns |
+|---|---|---|
+| `bot.awaiter.chat()` | Room chat messages | `List[tuple[User, Message]]` |
+| `bot.awaiter.whisper()` | Whispered messages | `List[tuple[User, Message]]` |
+| `bot.awaiter.direct()` | Direct messages | `List[tuple[str, Optional[Message], Conversation]]` |
+| `bot.awaiter.tip()` | Tips | `List[tuple[Sender, Receiver, Item]]` |
+| `bot.awaiter.movement()` | User movement | `List[tuple[User, Optional[Position], Optional[AnchorPosition]]]` |
+| `bot.awaiter.emote()` | Emotes | `List[tuple[User, str, Receiver]]` |
+
+### Every method accepts:
+
+| Parameter | Default | Description |
+|---|---|---|
+| `filter_fn` | `None` | Only match events that pass this function |
+| `timeout` | `None` | Max seconds to wait; on timeout, returns whatever matched so far instead of raising |
+| `max_count` | `1` | Wait for this many matching events before returning |
+| `unique` | `False` | Deduplicate matches (e.g. one per user) |
+
 ## Public methods
 
 ```python
@@ -189,13 +221,14 @@ class MyBot(BaseBot):
 ## BaseBot properties
 
 ```python
-bot.is_connected: bool      # True if the WebSocket connection is currently open
-bot.is_paused: bool      # True if event dispatch is currently paused
-bot.state: State | None      # The raw WebSocket connection state, or None if not connected
-bot.uptime: float      # Seconds since the current connection was established
-bot.latency: float | None      # Round-trip time in seconds of the last keepalive, or None
-bot.credentials: Credentials | None      # The room_id/api_token used for this session, or None before connecting
-bot.session_metadata: SessionMetadata | None      # The session metadata received once connected, or None before then
+bot.is_connected: bool                       # True if the WebSocket connection is currently open
+bot.is_paused: bool                          # True if event dispatch is currently paused
+bot.state: State | None                      # The raw WebSocket connection state, or None if not connected
+bot.uptime: float                            # Seconds since the current connection was established
+bot.latency: float | None                    # Round-trip time in seconds of the last keepalive, or None
+bot.events_processed: int                    # Total events processed since the current connection was established
+bot.credentials: Credentials | None          # The room_id/api_token used for this session, or None before connecting
+bot.session_metadata: SessionMetadata | None # The session metadata received once connected, or None before then
 ```
 
 ## Migrating from the official SDK
