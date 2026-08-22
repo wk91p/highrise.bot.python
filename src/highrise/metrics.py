@@ -1,6 +1,4 @@
 import time
-from typing import Optional
-
 
 class Metrics:
     """Tracks runtime stats for the bot session: `uptime` and `keepalive
@@ -8,8 +6,8 @@ class Metrics:
     events happen."""
 
     def __init__(self) -> None:
-        self._connected_at: Optional[float] = None
-        self._last_latency: Optional[float] = None
+        self._connected_at: float | None = None
+        self._last_latency: float | None = None
         self._events_processed: int = 0
 
     def mark_connected(self) -> None:
@@ -40,7 +38,7 @@ class Metrics:
         return time.monotonic() - self._connected_at
 
     @property
-    def latency(self) -> Optional[float]:
+    def latency(self) -> float | None:
         """Round-trip time in seconds of the last keepalive, or None if not yet measured."""
         return self._last_latency
 

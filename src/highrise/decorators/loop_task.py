@@ -1,6 +1,6 @@
 import asyncio
 import time
-from typing import Callable, Coroutine, Any, Optional, TYPE_CHECKING
+from typing import Callable, Coroutine, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..tools.logger import Logger
@@ -15,7 +15,7 @@ class LoopTask:
         self.coro_fn = coro_fn
         self.seconds = seconds
         self.logger = logger
-        self._task: Optional[asyncio.Task] = None
+        self._task: asyncio.Task | None = None
 
     async def _run_loop(self) -> None:
         task_name = self.coro_fn.__name__

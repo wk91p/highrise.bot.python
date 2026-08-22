@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Callable, Optional
+from typing import TYPE_CHECKING, Any
+from collections.abc import Callable
 
 if TYPE_CHECKING:
     from ..base_bot import BotContext
@@ -40,7 +41,7 @@ class OutfitMixin:
 
         return response
 
-    async def set_outfit(self, outfit: Optional[list[OutfitItem]] = None) -> AcknowledgementResponse:
+    async def set_outfit(self, outfit: list[OutfitItem] | None = None) -> AcknowledgementResponse:
         """Sets the bot's outfit. Automatically ensures the base `body-flesh` item is present."""
 
         target_outfit = outfit if outfit is not None else list(DEFAULT_OUTFIT)

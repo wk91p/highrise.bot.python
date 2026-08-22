@@ -2,7 +2,6 @@ import logging
 import sys
 from enum import IntEnum
 from datetime import datetime, timezone
-from typing import Optional
 
 class LoggerLevel(IntEnum):
     DEBUG = logging.DEBUG
@@ -35,7 +34,7 @@ class SDKFormatter(logging.Formatter):
         self.time_part = "[%(asctime)s] " if show_time else ""
         self._formatters: dict[int, logging.Formatter] = {}
 
-    def formatTime(self, record: logging.LogRecord, datefmt: Optional[str] = None) -> str:
+    def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:
         """Formats timestamp into YYYY/MM/DD - HH:MM AM/PM UTC format."""
         dt = datetime.fromtimestamp(record.created, tz=timezone.utc)
         return dt.strftime("%Y/%m/%d - %I:%M %p")

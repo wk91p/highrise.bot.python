@@ -1,4 +1,6 @@
-from typing import TYPE_CHECKING, Any, Callable, Optional
+from typing import TYPE_CHECKING, Any
+from collections.abc import Callable
+
 from ..models.webapi_models import SortOptions
 
 if TYPE_CHECKING:
@@ -12,7 +14,7 @@ class GrabsWebMixin:
     _context: "BotContext"
 
     async def _send_request(
-        self, endpoint: str, response_cls: Any, validate_fn: Callable, params: Optional[dict] = None
+        self, endpoint: str, response_cls: Any, validate_fn: Callable, params: dict | None = None
     ) -> Any: ...
 
     async def get_grab(self, grab_id: str) -> GetPublicGrabResponse:

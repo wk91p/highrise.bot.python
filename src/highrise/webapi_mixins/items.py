@@ -1,4 +1,6 @@
-from typing import TYPE_CHECKING, Any, Callable, Optional
+from typing import TYPE_CHECKING, Any
+from collections.abc import Callable
+
 from ..models.webapi_models import SortOptions, ItemCategory, Rarity
 
 if TYPE_CHECKING:
@@ -12,14 +14,14 @@ class ItemsWebMixin:
     _context: "BotContext"
 
     async def _send_request(
-        self, endpoint: str, response_cls: Any, validate_fn: Callable, params: Optional[dict] = None
+        self, endpoint: str, response_cls: Any, validate_fn: Callable, params: dict | None = None
     ) -> Any: ...
 
     async def search_items(
         self,
         query: str,
-        limit: Optional[int] = None,
-        skip: Optional[int] = None,
+        limit: int | None = None,
+        skip: int | None = None,
     ) -> SearchItemsResponse:
         """Search for items by name/query. `skip` offsets results for
         pagination, omit it to start from the beginning.

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Any
+from typing import Any
 
 
 @dataclass
@@ -10,7 +10,7 @@ class BaseResponse:
     shared ok/error contract.
     """
     ok: bool
-    error: Optional[str] = None
+    error: str | None = None
 
     @classmethod
     def _from_raw(cls, success: bool, data: Any) -> "BaseResponse":

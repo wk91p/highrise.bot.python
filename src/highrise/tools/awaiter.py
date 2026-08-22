@@ -1,6 +1,6 @@
 import asyncio
 from collections.abc import Callable
-from typing import Any, Optional, TypeVar, List, Tuple
+from typing import Any, TypeVar
 
 from ..models.events import (
     AnchorPosition,
@@ -14,9 +14,9 @@ from ..models.events import (
 )
 
 ChatFilter = Callable[[User, Message], bool]
-DirectFilter = Callable[[str, Optional[str], Conversation], bool]
+DirectFilter = Callable[[str, str | None, Conversation], bool]
 TipFilter = Callable[[Sender, Receiver, Item], bool]
-MovementFilter = Callable[[User, Optional[Position], Optional[AnchorPosition]], bool]
+MovementFilter = Callable[[User, Position | None, AnchorPosition | None], bool]
 EmoteFilter = Callable[[User, str, Receiver], bool]
 
 T = TypeVar("T", bound=tuple)
@@ -34,7 +34,7 @@ class _PendingWait:
     def __init__(
         self,
         event_type: str,
-        filter_fn: Optional[Callable[..., bool]],
+        filter_fn: Callable[..., bool] | None,
         max_count: int,
         unique: bool,
     ) -> None:
@@ -87,8 +87,8 @@ class Awaiter:
     async def _wait_for(
         self,
         event_type: str,
-        filter_fn: Optional[Callable[..., bool]] = None,
-        timeout: Optional[float] = None,
+        filter_fn: Callable[..., bool] | None = None,
+        timeout: float | None = None,
         max_count: int = 1,
         unique: bool = False,
     ) -> list[T]:
@@ -110,11 +110,11 @@ class Awaiter:
 
     async def chat(
         self,
-        filter_fn: Optional[ChatFilter] = None,
-        timeout: Optional[float] = None,
+        filter_fn: ChatFilter | None = None,
+        timeout: float  | None = None,
         max_count: int = 1,
         unique: bool = False,
-    ) -> List[tuple[User, Message]]:
+    ) -> list[tuple[User, Message]]:
         """Wait for chat messages."""
         return await self._wait_for(
             "on_chat", filter_fn=filter_fn, timeout=timeout, max_count=max_count, unique=unique
@@ -122,11 +122,11 @@ class Awaiter:
 
     async def whisper(
         self,
-        filter_fn: Optional[ChatFilter] = None,
-        timeout: Optional[float] = None,
+        filter_fn: ChatFilter | None = None,
+        timeout: float  | None = None,
         max_count: int = 1,
         unique: bool = False,
-    ) -> List[tuple[User, Message]]:
+    ) -> list[tuple[User, Message]]:
         """Wait for whispered messages."""
         return await self._wait_for(
             "on_whisper", filter_fn=filter_fn, timeout=timeout, max_count=max_count, unique=unique
@@ -134,11 +134,11 @@ class Awaiter:
 
     async def direct(
         self,
-        filter_fn: Optional[DirectFilter] = None,
-        timeout: Optional[float] = None,
+        filter_fn: DirectFilter | None = None,
+        timeout: float  | None = None,
         max_count: int = 1,
         unique: bool = False,
-    ) -> List[tuple[str, Optional[Message], Conversation]]:
+    ) -> list[tuple[str, Message], Conversation]:
         """Wait for direct messages."""
         return await self._wait_for(
             "on_message", filter_fn=filter_fn, timeout=timeout, max_count=max_count, unique=unique
@@ -146,11 +146,11 @@ class Awaiter:
 
     async def tip(
         self,
-        filter_fn: Optional[TipFilter] = None,
-        timeout: Optional[float] = None,
+        filter_fn: TipFilter | None = None,
+        timeout: float  | None = None,
         max_count: int = 1,
         unique: bool = False,
-    ) -> List[tuple[User, User, Item]]:
+    ) -> list[tuple[User, User, Item]]:
         """Wait for tips."""
         return await self._wait_for(
             "on_tip", filter_fn=filter_fn, timeout=timeout, max_count=max_count, unique=unique
@@ -158,11 +158,11 @@ class Awaiter:
 
     async def movement(
         self,
-        filter_fn: Optional[MovementFilter] = None,
-        timeout: Optional[float] = None,
+        filter_fn: MovementFilter | None = None,
+        timeout: float  | None = None,
         max_count: int = 1,
         unique: bool = False,
-    ) -> List[tuple[User, Optional[Position], Optional[AnchorPosition]]]:
+    ) -> list[tuple[User, Position | None, AnchorPosition | None]]:
         """Wait for user movement."""
         return await self._wait_for(
             "on_user_move", filter_fn=filter_fn, timeout=timeout, max_count=max_count, unique=unique
@@ -170,11 +170,11 @@ class Awaiter:
 
     async def emote(
         self,
-        filter_fn: Optional[EmoteFilter] = None,
-        timeout: Optional[float] = None,
+        filter_fn: EmoteFilter | None = None,
+        timeout: float  | None = None,
         max_count: int = 1,
         unique: bool = False,
-    ) -> List[tuple[User, str, Receiver]]:
+    ) -> list[tuple[User, str, Receiver]]:
         """Wait for emotes."""
         return await self._wait_for(
             "on_emote", filter_fn=filter_fn, timeout=timeout, max_count=max_count, unique=unique

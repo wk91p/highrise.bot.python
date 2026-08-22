@@ -1,7 +1,8 @@
 import httpx
 from .http_client import HttpClient
 from .constants import WEBAPI_BASE_URL
-from typing import Any, Callable, TYPE_CHECKING, Optional
+from typing import Any, TYPE_CHECKING
+from collections.abc import Callable
 
 from .webapi_mixins.users import UsersWebMixin
 from .webapi_mixins.rooms import RoomsWebMixin
@@ -33,7 +34,7 @@ class WebApi(
         self._context = context
 
     async def _send_request(
-        self, endpoint: str, response_cls: Any, validate_fn: Callable, params: Optional[dict] = None
+        self, endpoint: str, response_cls: Any, validate_fn: Callable, params: dict | None = None
     ) -> Any:
         try:
             validate_fn()

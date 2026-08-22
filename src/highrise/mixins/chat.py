@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Callable, List
+from typing import TYPE_CHECKING, Any
+from collections.abc import Callable
 import asyncio
 import textwrap
 
@@ -19,9 +20,9 @@ class ChatMixin:
 
     async def _send_request(self, response_cls: Any, build_payload: Callable[[], dict]) -> Any: ...
 
-    async def _send_chunks(self, chunks: List[str], build_request: Callable[[str], Any]) -> List[AcknowledgementResponse]:
+    async def _send_chunks(self, chunks: list[str], build_request: Callable[[str], Any]) -> list[AcknowledgementResponse]:
         """Sends each chunk in order with a delay between sends, collecting all responses."""
-        responses: List[AcknowledgementResponse] = []
+        responses: list[AcknowledgementResponse] = []
 
         for i, chunk in enumerate(chunks):
             def build(chunk=chunk) -> dict:
@@ -36,7 +37,7 @@ class ChatMixin:
 
         return responses
 
-    async def chat(self, message: str) -> AcknowledgementResponse | List[AcknowledgementResponse]:
+    async def chat(self, message: str) -> AcknowledgementResponse | list[AcknowledgementResponse]:
         """Sends a message to the room's chat. Messages over `256` characters
         are automatically split into multiple chunks, sent with a `400ms`
         delay between each. Returns a single response normally, or a list
@@ -54,7 +55,7 @@ class ChatMixin:
         chunks = textwrap.wrap(message, width=MAX_MESSAGE_LENGTH)
         return await self._send_chunks(chunks, lambda chunk: ChatRequest(message=chunk))
 
-    async def send_whisper(self, user_id: str, message: str) -> AcknowledgementResponse | List[AcknowledgementResponse]:
+    async def send_whisper(self, user_id: str, message: str) -> AcknowledgementResponse | list[AcknowledgementResponse]:
         """Sends a whisper to a user in the room's chat. Messages over `256`
         characters are automatically split into multiple chunks, sent with
         a `400ms` delay between each. Returns a single response normally, or

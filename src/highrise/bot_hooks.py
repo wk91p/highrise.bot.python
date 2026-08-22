@@ -1,4 +1,4 @@
-from typing import Optional, List, Any
+from typing import Any
 
 from .models.events import *
 from .models.highrise_models import *
@@ -43,8 +43,8 @@ class BotHooks:
     async def on_user_move(
         self,
         user: User,
-        position: Optional[Position],
-        anchor: Optional[AnchorPosition],
+        position: Position | None,
+        anchor: AnchorPosition | None,
     ) -> None:
         """Called when a user moves or changes position in the room."""
         pass
@@ -69,7 +69,7 @@ class BotHooks:
         """
         pass
 
-    async def on_voice_change(self, users: List[Any], seconds_left: int) -> None:
+    async def on_voice_change(self, users: list[Any], seconds_left: int) -> None:
         """Called when there is an update to the room's voice status.
 
         - `Deprecated in update 4.25.3`
@@ -85,6 +85,6 @@ class BotHooks:
         """Called when a moderation action occurs in the room."""
         pass
 
-    async def on_channel(self, bot_id: str, message: str, tags: List[str]) -> None:
+    async def on_channel(self, bot_id: str, message: str, tags: list[str]) -> None:
         """Called when a message is received on the hidden channel."""
         pass

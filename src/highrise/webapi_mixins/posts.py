@@ -1,5 +1,7 @@
 from ..models.webapi_responses import GetPublicPostResponse, GetPublicPostsResponse
-from typing import Any, Callable, TYPE_CHECKING, Optional
+from typing import Any, TYPE_CHECKING
+from collections.abc import Callable
+
 from ..models.webapi_models import SortOptions
 
 if TYPE_CHECKING:
@@ -11,7 +13,7 @@ class PostsWebMixin:
     _context: "BotContext"
 
     async def _send_request(
-        self, endpoint: str, response_cls: Any, validate_fn: Callable, params: Optional[dict] = None
+        self, endpoint: str, response_cls: Any, validate_fn: Callable, params: dict | None = None
     ) -> Any: ...
 
     async def get_post(self, post_id: str) -> GetPublicPostResponse:

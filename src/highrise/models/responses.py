@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
-from typing import TypeVar, Generic, Any, Callable, Coroutine, Optional
+from typing import TypeVar, Generic, Any
+from collections.abc import Coroutine, Callable
 
 from highrise.models.base_response import BaseResponse
 from highrise.models.highrise_models import *
@@ -30,7 +31,7 @@ class ResponseIterator(Generic[TPage]):
     """Handles the async iteration state safely. Works for any paginated BaseResponse subclass that exposes `next_page_fn`."""
 
     def __init__(self, initial_response: TPage):
-        self._current_response: Optional[TPage] = initial_response
+        self._current_response: TPage | None = initial_response
         self._first_page_yielded = False
 
     async def __anext__(self) -> TPage:
@@ -56,7 +57,7 @@ class GetMessagesResponse(BaseResponse):
     payload. Supports `async for page in response:`.
     """
     messages: list[MessageEntry] = field(default_factory=list)
-    next_page_fn: Optional[Callable[[], Coroutine[Any, Any, "GetMessagesResponse"]]] = None
+    next_page_fn: Callable[[], Coroutine[Any, Any, "GetMessagesResponse"]] | None = None
 
     def _build(self, data: Any) -> None:
         raw_messages = data.get("messages", [])
@@ -75,7 +76,7 @@ class GetConversationsResponse(BaseResponse):
     """
     conversations: list[ConversationEntry] = field(default_factory=list)
     not_joined: int = 0
-    next_page_fn: Optional[Callable[[], Coroutine[Any, Any, "GetConversationsResponse"]]] = None
+    next_page_fn: Callable[[], Coroutine[Any, Any, "GetConversationsRespone"]] | None = None
 
     def _build(self, data: Any) -> None:
         raw_conversations = data.get("conversations", [])

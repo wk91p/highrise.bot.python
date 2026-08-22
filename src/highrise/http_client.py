@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 import httpx
 
 
@@ -7,7 +7,7 @@ class HttpClient:
     specific API, can be used for any base URL and any set of
     endpoints. Owns a single `httpx.AsyncClient` for its lifetime."""
 
-    def __init__(self, base_url: str = "", timeout: float = 10.0, headers: Optional[dict] = None) -> None:
+    def __init__(self, base_url: str = "", timeout: float = 10.0, headers: dict | None = None) -> None:
         self._base_url = base_url.rstrip("/")
         self._client = httpx.AsyncClient(timeout=timeout, headers=headers or {})
 

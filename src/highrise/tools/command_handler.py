@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Callable, Coroutine, Any, Dict, TYPE_CHECKING, Optional
+from typing import Callable, Coroutine, Any, TYPE_CHECKING
 import importlib.util
 from pathlib import Path
 
@@ -33,7 +33,7 @@ class CommandHandler:
 
     def __init__(self, bot: "BaseBot") -> None:
         self.bot = bot
-        self._commands: Dict[str, Command] = {}
+        self._commands: dict[str, Command] = {}
 
     def load_directory(self, directory: str = "commands") -> None:
         """Imports every `.py` file in the given directory and registers
@@ -74,7 +74,7 @@ class CommandHandler:
             self.bot.logger.warning(f"Command name '{command.name}' is already registered, overwriting.")
         self._commands[command.name] = command
 
-    def _resolve_user_id(self, context: dict) -> Optional[str]:
+    def _resolve_user_id(self, context: dict) -> str | None:
         """Pulls a user id out of context, accepting either a raw
         `user_id` key or a `user` object with an `.id` attribute."""
         if "user_id" in context:

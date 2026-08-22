@@ -1,5 +1,5 @@
 from ..models.webapi_responses import GetPublicUserResponse
-from typing import Any, Callable, TYPE_CHECKING, Optional
+from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..base_bot import BotContext
@@ -10,7 +10,7 @@ class UsersWebMixin:
     _context : "BotContext"
 
     async def _send_request(
-        self, endpoint: str, response_cls: Any, validate_fn: Callable, params: Optional[dict] = None
+        self, endpoint: str, response_cls: Any, validate_fn: Callable, params: dict | None = None
     ) -> Any: ...
 
     async def get_user(self, identifier: str) -> GetPublicUserResponse:

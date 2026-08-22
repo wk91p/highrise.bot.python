@@ -2,7 +2,8 @@ import asyncio
 import json
 import uuid
 from websockets import State
-from typing import Any, Callable, Dict, Tuple
+from typing import Any
+from collections.abc import Callable
 from websockets import ClientConnection
 
 class WSRequester:
@@ -12,9 +13,9 @@ class WSRequester:
         """
         self._get_ws = ws_getter
         self.logger = logger
-        self._pending_requests: Dict[str, asyncio.Future[Tuple[bool, Any]]] = {}
+        self._pending_requests: dict[str, asyncio.Future[tuple[bool, Any]]] = {}
 
-    async def send(self, payload: Dict[str, Any], timeout: float = 10.0) -> Tuple[bool, Any]:
+    async def send(self, payload: dict[str, Any], timeout: float = 10.0) -> tuple[bool, Any]:
         """
         Sends a dictionary payload over WebSocket and awaits the response.
         """
@@ -26,7 +27,7 @@ class WSRequester:
         payload["rid"] = rid
 
         loop = asyncio.get_running_loop()
-        future: asyncio.Future[Tuple[bool, Any]] = loop.create_future()
+        future: asyncio.Future[tuple[bool, Any]] = loop.create_future()
         self._pending_requests[rid] = future
 
         try:
@@ -43,7 +44,7 @@ class WSRequester:
         finally:
             self._pending_requests.pop(rid, None)
 
-    def handle_incoming_response(self, data: Dict[str, Any]) -> bool:
+    def handle_incoming_response(self, data: dict[str, Any]) -> bool:
         """
         Processes an incoming response from the WebSocket.
         """

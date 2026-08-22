@@ -4,7 +4,8 @@ import asyncio
 import inspect
 import websockets
 from websockets import State
-from typing import Optional, Set, List, Any, Coroutine, Callable
+from typing import Any
+from collections.abc import Coroutine, Callable
 
 from .ws_requester import WSRequester
 from .event_handlers import EVENT_HANDLERS
@@ -31,7 +32,7 @@ class BotContext:
     def __init__(self, requester: "WSRequester", validator: "Validator") -> None:
         self.requester = requester
         self.validator = validator
-        self.session_metadata: Optional[SessionMetadata] = None
+        self.session_metadata: SessionMetadata | None = None
         self.credentials: Credentials | None = None
         self.cache = CacheManager()
         self.metrics = Metrics()
@@ -45,10 +46,10 @@ class BaseBot(BotHooks):
     The `self.highrise` attribute can be used to make requests.
     """
 
-    def __init__(self, config: Optional[BotConfig] = None) -> None:
+    def __init__(self, config: BotConfig | None = None) -> None:
         self.config = config or BotConfig()
 
-        self._ws: Optional[websockets.ClientConnection] = None
+        self._ws: websockets.ClientConnection | None = None
 
         self.logger = setup_logger(
             name=self.config.logger.name,
@@ -66,7 +67,7 @@ class BaseBot(BotHooks):
         self.roles = Roles(path=self.config.roles.path)
         self.webapi = WebApi(self._context)
 
-        self._tasks: List[asyncio.Task] = []
+        self._tasks: list[asyncio.Task] = []
         self._loops: list[LoopTask] = []
         self._is_running: bool = False
         self._is_paused: bool = False
@@ -100,7 +101,7 @@ class BaseBot(BotHooks):
 
     def _get_requested_events(self) -> str:
         """Dynamically builds the required Highrise WebSocket query events by checking which hook being override."""
-        active_events: Set[str] = set()
+        active_events: set[str] = set()
 
         for event_name, hook_names in EVENT_HOOK_MAP.items():
             for hook in hook_names:
@@ -413,7 +414,7 @@ class BaseBot(BotHooks):
         return self._context.metrics.uptime
 
     @property
-    def latency(self) -> Optional[float]:
+    def latency(self) -> float | None:
         """Round-trip time in seconds of the last keepalive."""
         return self._context.metrics.latency
 

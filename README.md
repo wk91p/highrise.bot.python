@@ -298,8 +298,8 @@ async def on_user_move(
 async def on_user_move(
     self,
     user: User,
-    position: Optional[Position],
-    anchor: Optional[AnchorPosition],
+    position: Position | None,
+    anchor: AnchorPosition | None,
 ) -> None:
     """Called when a user moves or changes position in the room."""
     pass

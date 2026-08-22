@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import Optional
 from .tools.logger import LoggerLevel
 
 @dataclass
@@ -8,7 +7,7 @@ class ConnectionConfig:
     min_reconnect_delay: float = 5.0
     max_reconnect_delay: float = 30.0
     reconnect_backoff_factor: float = 2.0
-    max_reconnect_attempts: Optional[int] = None
+    max_reconnect_attempts: int | None = None
 
 @dataclass
 class LoggerConfig:

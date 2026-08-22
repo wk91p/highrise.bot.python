@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import Optional, List, Union
 from .highrise_models import Facing, ModerationType, CurrencyType
 
 @dataclass
@@ -37,17 +36,17 @@ class Message:
     content: str
     """The full text content of the message."""
 
-    _args: List[str] = field(init=False, repr=False)
+    _args: list[str] = field(init=False, repr=False)
 
     def __post_init__(self) -> None:
         self._args = self.content.strip().split() if self.content else []
 
-    def command(self) -> Optional[str]:
+    def command(self) -> str | None:
         """Returns the first word of the message, treated as the
         command name if this message is a command."""
         return self._args[0] if self._args else None
 
-    def args(self, index: Optional[int] = None) -> Union[List[str], str, None]:
+    def args(self, index:int | None = None) -> list[str] | str | None:
         """Returns the message arguments (excluding the command itself).
         Pass an index to get a specific argument, or omit it to get
         the full list."""
@@ -58,7 +57,7 @@ class Message:
 
         return rest[index] if index < len(rest) else None
 
-    def mentions(self, index: Optional[int] = None) -> Union[List[str], str, None]:
+    def mentions(self, index: int | None = None) -> list[str] | str | None:
         """Returns all mentioned usernames (words starting with '@',
         with the '@' stripped). Pass an index to get a specific
         mention, or omit it to get the full list."""
@@ -88,7 +87,7 @@ class Item:
 class ModerationAction:
     """The type of moderation action taken."""
     type: ModerationType
-    duration: Optional[int] = None
+    duration: int | None = None
 
 
 @dataclass

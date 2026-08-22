@@ -1,4 +1,3 @@
-from typing import Tuple
 from .models.highrise_models import OutfitItem
 
 WEBSOCKET_EVENTS = [
@@ -8,7 +7,7 @@ WEBSOCKET_EVENTS = [
     'EmoteEvent', 'VoiceEvent', 'ReactionEvent'
 ]
 
-EVENT_HOOK_MAP: dict[str, Tuple[str, ...]] = {
+EVENT_HOOK_MAP: dict[str, tuple[str, ...]] = {
     "ChatEvent": ("on_chat", "on_whisper"),
     "UserJoinedEvent": ("on_user_join",),
     "UserLeftEvent": ("on_user_leave",),

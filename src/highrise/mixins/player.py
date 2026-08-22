@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any
+from collections.abc import Callable
 import asyncio
 
 if TYPE_CHECKING:

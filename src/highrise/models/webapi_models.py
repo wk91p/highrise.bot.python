@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional, Sequence, Literal
+from typing import Literal
+from collections.abc import Sequence
 from enum import Enum, unique
 
 SortOptions = Literal["desc", "asc"]
@@ -82,7 +83,6 @@ class NFIStrategy(str, Enum):
     TOTAL_DEFINED = "total_defined"
     POOL = "pool"
 
-
 @dataclass(frozen=True)
 class WebOutfitItemColors:
     """Color/palette data for a single web-API outfit item."""
@@ -99,14 +99,14 @@ class WebOutfitItem:
     rarity: str
     active_palette: int
     parts: list[tuple[str, str]]
-    colors: Optional[WebOutfitItemColors] = None
+    colors: WebOutfitItemColors | None = None
 
 @dataclass(frozen=True)
 class ActiveRoomInfo:
     """The room a user is currently active in, if any."""
     id: str
     display_name: str
-    code_name: Optional[str]
+    code_name: str | None
 
 @dataclass(frozen=True)
 class Crew:
@@ -121,15 +121,15 @@ class PublicUser:
     username: str
     bio: str
     joined_at: datetime
-    last_online_in: Optional[datetime]
+    last_online_in: datetime | None
     num_followers: int
     num_following: int
     num_friends: int
-    active_room: Optional[ActiveRoomInfo]
+    active_room: ActiveRoomInfo | None
     country_code: str
-    crew: Optional[Crew]
+    crew: Crew | None
     voice_enabled: bool
-    discord_id: Optional[str] = None
+    discord_id: str | None = None
     outfit: list[WebOutfitItem] = field(default_factory=list)
 
 @dataclass(frozen=True)
@@ -137,7 +137,7 @@ class PublicRoomBasic:
     """A lighter room shape, as returned by `GET /rooms` (list endpoint)."""
     room_id: str
     disp_name: str
-    created_at: Optional[datetime]
+    created_at: datetime | None
     access_policy: str
     category: str
     owner_id: str
@@ -210,47 +210,47 @@ class SkinPart:
     bone: str
     slot: str
     image_file: str
-    attachment_name: Optional[str] = None
-    has_remote_render_layer: Optional[bool] = None
+    attachment_name: str | None = None
+    has_remote_render_layer: bool | None = None
 
 @dataclass(frozen=True)
 class ItemBasic:
     """A single item, as returned by `GET /items/search`."""
     item_id: str
     item_name: str
-    category: Optional[ItemCategory] = None
+    category: ItemCategory | None = None
     color_linked_categories: list[str] = field(default_factory=list)
     color_palettes: list[str] = field(default_factory=list)
-    created_at: Optional[datetime] = None
-    description_key: Optional[str] = None
-    gems_sale_price: Optional[int] = None
+    created_at: datetime | None = None
+    description_key: str | None = None
+    gems_sale_price: int | None = None
     inspired_by: list[str] = field(default_factory=list)
     is_purchasable: bool = False
     is_tradable: bool = False
-    image_url: Optional[str] = None
-    icon_url: Optional[str] = None
+    image_url: str | None = None
+    icon_url: str | None = None
     link_ids: list[str] = field(default_factory=list)
     m_dependent_colors: list[tuple[ItemCategory, int, int]] = field(default_factory=list)
     m_front_skin_part_list: list[SkinPart] = field(default_factory=list)
     m_back_skin_part_list: list[SkinPart] = field(default_factory=list)
     m_hidden_skin_parts: set = field(default_factory=set)
-    pops_sale_price: Optional[int] = None
+    pops_sale_price: int | None = None
     rarity: Rarity = Rarity.NONE
-    release_date: Optional[datetime] = None
+    release_date: datetime | None = None
 
 @dataclass(frozen=True)
 class Item(ItemBasic):
     """A full item, as returned by `GET /items/{item_id}`."""
-    acquisition_cost: Optional[int] = None
-    acquisition_amount: Optional[int] = None
-    acquisition_currency: Optional[str] = None
+    acquisition_cost: int | None = None
+    acquisition_amount: int | None = None
+    acquisition_currency: str | None = None
 
 @dataclass(frozen=True)
 class Affiliation:
     id: str
     title: str
     type: str
-    event_type: Optional[str] = None
+    event_type: str | None = None
 
 @dataclass(frozen=True)
 class RelatedItem:
@@ -268,7 +268,7 @@ class Seller:
     user_id: str
     username: str
     outfit: list[WebOutfitItem] = field(default_factory=list)
-    last_connected_at: Optional[datetime] = None
+    last_connected_at: datetime | None = None
 
 @dataclass(frozen=True)
 class StorefrontListings:
@@ -291,13 +291,13 @@ class NFIItemMetadata:
 @dataclass(frozen=True)
 class NFITemplateMetadata:
     strategy: NFIStrategy
-    total_amount: Optional[int] = None
+    total_amount: int | None = None
 
 
 @dataclass(frozen=True)
 class ItemMetadata:
-    nfi_metadata: Optional[NFIItemMetadata] = None
-    nfi_template_metadata: Optional[NFITemplateMetadata] = None
+    nfi_metadata: NFIItemMetadata | None = None
+    nfi_template_metadata: NFITemplateMetadata | None = None
 
 
 @dataclass(frozen=True)
@@ -305,14 +305,14 @@ class Reward:
     category: LegacyRewardCategory
     amount: int
     reward_id: str = ""
-    item_id: Optional[str] = None
+    item_id: str | None = None
     account_bound: bool = False
-    metadata: Optional[ItemMetadata] = None
+    metadata: ItemMetadata | None = None
 
 
 @dataclass(frozen=True)
 class LimitedKompuReward:
-    expires_at: Optional[datetime] = None
+    expires_at: datetime | None = None
     rewards: list[Reward] = field(default_factory=list)
 
 
@@ -329,13 +329,13 @@ class Grab:
     description: str
     background_color: tuple[int, int, int]
     banner_img_url: str
-    starts_at: Optional[datetime] = None
-    expires_at: Optional[datetime] = None
+    starts_at: datetime | None = None
+    expires_at: datetime | None = None
     rewards: list[Reward] = field(default_factory=list)
-    primary_img_url: Optional[str] = None
-    secondary_img_url: Optional[str] = None
+    primary_img_url: str | None = None
+    secondary_img_url: str | None = None
     costs: list[Reward] = field(default_factory=list)
     kompu_rewards: list[Reward] = field(default_factory=list)
     is_tradable: bool = True
-    limited_time_kompu: Optional[LimitedKompuReward] = None
-    progress_reward: Optional[ProgressReward] = None
+    limited_time_kompu: LimitedKompuReward | None = None
+    progress_reward: ProgressReward | None = None

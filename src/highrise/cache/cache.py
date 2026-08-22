@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, Optional
+from typing import TypeVar, Generic
 from ..models.responses import (
     GetUserOutfitResponse
 )
@@ -13,7 +13,7 @@ class Cache(Generic[T]):
     def __init__(self) -> None:
         self._store: dict[str, T] = {}
 
-    def get(self, key: str) -> Optional[T]:
+    def get(self, key: str) -> T | None:
         return self._store.get(key)
 
     def set(self, key: str, value: T) -> None:

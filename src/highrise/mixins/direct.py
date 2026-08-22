@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Callable, List
+from typing import TYPE_CHECKING, Any
+from collections.abc import Callable
 import asyncio
 import textwrap
 
@@ -22,7 +23,7 @@ class DirectMixin:
         self,
         recipient: str | list[str],
         content: str,
-    ) -> AcknowledgementResponse | List[AcknowledgementResponse]:
+    ) -> AcknowledgementResponse | list[AcknowledgementResponse]:
         """Sends a text message to a `conversation_id`, or to multiple `userIds` at once (bulk, max 100).
         Messages over `2000` characters are automatically split into multiple
         chunks, sent with a `400ms` delay between each. Returns a single
@@ -50,7 +51,7 @@ class DirectMixin:
             return await self._send_request(AcknowledgementResponse, build)
 
         chunks = textwrap.wrap(content, width=DM_MAX_LENGTH)
-        responses: List[AcknowledgementResponse] = []
+        responses: list[AcknowledgementResponse] = []
 
         for i, chunk in enumerate(chunks):
             def build(chunk=chunk) -> dict:

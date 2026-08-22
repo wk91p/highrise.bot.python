@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Callable, Coroutine, Any
+from typing import Callable, Coroutine, Any
 from datetime import datetime
 from .webapi_models import *
 from .base_response import BaseResponse
@@ -24,7 +24,7 @@ def _parse_web_outfit_item(raw: dict) -> WebOutfitItem:
 @dataclass
 class GetPublicUserResponse(BaseResponse):
     """Response for `GET /users/{user_id}`."""
-    user: Optional[PublicUser] = None
+    user: PublicUser | None = None
 
     def _build(self, data: dict) -> None:
         raw_user = data.get("user", {})
@@ -63,7 +63,7 @@ class GetPublicUserResponse(BaseResponse):
 @dataclass
 class GetPublicRoomResponse(BaseResponse):
     """ Response for `GET /rooms/{room_id}`"""
-    room: Optional[PublicRoom] = None
+    room: PublicRoom | None = None
 
     def _build(self, data: dict):
         raw_room = data.get('room', {})
@@ -94,7 +94,7 @@ class GetPublicRoomsResponse(BaseResponse):
     total: int = 0
     first_id: str = ""
     last_id: str = ""
-    next_page_fn: Optional[Callable[[], Coroutine[Any, Any, "GetPublicRoomsResponse"]]] = None
+    next_page_fn: Callable[[], Coroutine[Any, Any, "GetPublicRoomsResponse"]] | None = None
 
     def _build(self, data: dict) -> None:
         raw_rooms = data.get("rooms", [])
@@ -128,7 +128,7 @@ class GetPublicRoomsResponse(BaseResponse):
 @dataclass
 class GetPublicPostResponse(BaseResponse):
     """Response for `GET /posts/{post_id}`"""
-    post: Optional[PublicPost] = None
+    post: PublicPost | None = None
 
     def _build(self, data: dict):
         raw_post = data.get('post', {})
@@ -166,7 +166,7 @@ class GetPublicPostsResponse(BaseResponse):
     total: int = 0
     first_id: str = ""
     last_id: str = ""
-    next_page_fn: Optional[Callable[[], Coroutine[Any, Any, "GetPublicPostsResponse"]]] = None
+    next_page_fn: Callable[[], Coroutine[Any, Any, "GetPublicPostsResponse"]] | None = None
 
     def _build(self, data: dict) -> None:
         raw_posts = data.get("posts", [])
@@ -203,7 +203,7 @@ class GetPublicPostsResponse(BaseResponse):
 class SearchItemsResponse(BaseResponse):
     """Response for GET `/items/search`."""
     items: list[ItemBasic] = field(default_factory=list)
-    next_page_fn: Optional[Callable[[], Coroutine[Any, Any, "SearchItemsResponse"]]] = None
+    next_page_fn: Callable[[], Coroutine[Any, Any, "SearchItemsResponse"]] | None = None
 
     def _build(self, data: dict) -> None:
         raw_items = data.get("items", [])
@@ -260,9 +260,9 @@ class SearchItemsResponse(BaseResponse):
 @dataclass
 class GetPublicItemResponse(BaseResponse):
     """Response for GET `/items/{item_id}`."""
-    item: Optional[Item] = None
-    related_items: Optional[RelatedItems] = None
-    storefront_listings: Optional[StorefrontListings] = None
+    item: Item | None = None
+    related_items: RelatedItems | None = None
+    storefront_listings: StorefrontListings | None = None
 
     def _build(self, data: dict) -> None:
         raw_item = data.get("item")
@@ -344,7 +344,7 @@ class GetPublicItemsResponse(BaseResponse):
     total: int = 0
     first_id: str = ""
     last_id: str = ""
-    next_page_fn: Optional[Callable[[], Coroutine[Any, Any, "GetPublicItemsResponse"]]] = None
+    next_page_fn: Callable[[], Coroutine[Any, Any, "GetPublicItemsResponse"]] | None = None
 
     def _build(self, data: dict) -> None:
         raw_items = data.get("items", [])
@@ -359,7 +359,7 @@ class GetPublicItemsResponse(BaseResponse):
 @dataclass
 class GetPublicGrabResponse(BaseResponse):
     """Response for GET `/grabs/{grab_id}`."""
-    grab: Optional[Grab] = None
+    grab: Grab | None = None
 
     def _build(self, data: dict) -> None:
         raw_grab = data.get("grab")
@@ -444,7 +444,7 @@ class GetPublicGrabsResponse(BaseResponse):
     total: int = 0
     first_id: str = ""
     last_id: str = ""
-    next_page_fn: Optional[Callable[[], Coroutine[Any, Any, "GetPublicGrabsResponse"]]] = None
+    next_page_fn: Callable[[], Coroutine[Any, Any, "GetPublicGrabsResponse"]] | None = None
 
     def _build(self, data: dict) -> None:
         raw_grabs = data.get("grabs", [])
