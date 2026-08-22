@@ -142,7 +142,7 @@ class PlayerMixin:
         tiers = Utils.split_tip(amount)
         responses: list[TipUserResponse] = []
 
-        async for i, tier in enumerate(tiers):
+        for i, tier in enumerate(tiers):
             response = await self.tip_user(user_id, tier)
             responses.append(response)
 

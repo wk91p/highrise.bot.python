@@ -17,7 +17,7 @@ EVENT_HOOK_MAP: dict[str, tuple[str, ...]] = {
     "MessageEvent": ("on_message",),
     "ReactionEvent": ("on_reaction",),
     "VoiceEvent": ("on_voice_change",),
-    "RoomModeratedEvent": ("on_moderated",),
+    "RoomModeratedEvent": ("on_moderate",),
     "ChannelEvent": ("on_channel",),
 }
 
