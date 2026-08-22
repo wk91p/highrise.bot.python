@@ -153,6 +153,8 @@ Wait for a specific event to happen, with filtering, timeout, and multi-result s
 results = await bot.awaiter.chat(
     filter_fn=lambda u, m: u.id == target_id,
     timeout=30,
+    max_count=1,
+    unique=True
 )
 
 if results:
