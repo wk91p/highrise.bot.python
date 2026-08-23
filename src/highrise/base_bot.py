@@ -108,8 +108,9 @@ class BaseBot(BotHooks):
                 
                 subclass_method = getattr(self, hook, None)
                 base_method = getattr(BaseBot, hook, None)
+                subclass_func = getattr(subclass_method, "__func__", subclass_method)
 
-                if inspect.unwrap(subclass_method) != inspect.unwrap(base_method):
+                if inspect.unwrap(subclass_func) != inspect.unwrap(base_method):
                     active_events.add(event_name)
                     break
 
@@ -204,6 +205,7 @@ class BaseBot(BotHooks):
             "api-token": self.credentials.api_token
         }
 
+        print(self._event_params)
         url = f"{HIGHRISE_WS_URI}?events={self._event_params}"
 
         self._ws = await websockets.connect(url, additional_headers=headers, compression=None)

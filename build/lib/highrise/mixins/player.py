@@ -128,7 +128,7 @@ class PlayerMixin:
             self._context.validator.required(user_id, "user_id")
             self._context.validator.string(user_id, "user_id")
             self._context.validator.required(tip, "tip")
-            self._context.validator.one_of(tip, TIP_VALUES.items(), "tip")
+            self._context.validator.one_of(tip, TIP_VALUES.values(), "tip")
 
             request = TipUserRequest(user_id=user_id, gold_bar=tip)
             return request.to_dict()

@@ -29,7 +29,6 @@ class BaseResponse:
             instance._build(data)
         except Exception as e:
             instance.ok = False
-            print(e.with_traceback())
             instance.error = f"Failed to parse response: {e}"
 
         return instance
