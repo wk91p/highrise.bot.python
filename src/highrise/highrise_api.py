@@ -4,15 +4,15 @@ from collections.abc import Callable
 if TYPE_CHECKING:
     from .base_bot import BotContext
 
-from .mixins.chat import ChatMixin
-from .mixins.direct import DirectMixin
-from .mixins.channel import ChannelMixin
-from .mixins.player import PlayerMixin
-from .mixins.room import RoomMixin
-from .mixins.voice import VoiceMixin
-from .mixins.wallet import WalletMixin
-from .mixins.inventory import InventoryMixin
-from .mixins.outfit import OutfitMixin
+from .highrise_mixins.chat import ChatMixin
+from .highrise_mixins.direct import DirectMixin
+from .highrise_mixins.channel import ChannelMixin
+from .highrise_mixins.player import PlayerMixin
+from .highrise_mixins.room import RoomMixin
+from .highrise_mixins.voice import VoiceMixin
+from .highrise_mixins.wallet import WalletMixin
+from .highrise_mixins.inventory import InventoryMixin
+from .highrise_mixins.outfit import OutfitMixin
 
 class HighriseApi(
     ChatMixin, 
