@@ -82,11 +82,16 @@ class BaseBot(BotHooks):
         self._reconnect_backoff_factor = self.config.connection.reconnect_backoff_factor
         self._max_reconnect_attempts = self.config.connection.max_reconnect_attempts
 
+        self._background_tasks: list[tuple[Callable[[], Coroutine[Any, Any, None]], str]] = [
+            (self._autosave_roles_loop, "autosave_roles"),
+        ]
+
     def _on_first_start(self) -> None:
         """Internal SDK setup that must run exactly once, before the
         dev's before_start() hook. Devs never call or override this."""
-        task = asyncio.create_task(self._autosave_roles_loop(), name="autosave_roles")
-        self._tasks.append(task)
+        for coro_fn, name in self._background_tasks:
+            task = self._create_task(coro_fn(), name=name)
+            self._tasks.append(task)
 
     async def _autosave_roles_loop(self) -> None:
         """Periodically saves roles to disk. Runs for the life of the bot."""
@@ -205,7 +210,6 @@ class BaseBot(BotHooks):
             "api-token": self.credentials.api_token
         }
 
-        print(self._event_params)
         url = f"{HIGHRISE_WS_URI}?events={self._event_params}"
 
         self._ws = await websockets.connect(url, additional_headers=headers, compression=None)
@@ -215,7 +219,7 @@ class BaseBot(BotHooks):
         if self.config.auto_fetch.room_users:
             self._create_task(self._fetch_room_users())
 
-        keepalive_task = asyncio.create_task(self._send_keepalive())
+        keepalive_task = self._create_task(self._send_keepalive())
         self._tasks.append(keepalive_task)
 
         for registered_loop in self._loops:
