@@ -8,34 +8,22 @@ from typing import Any
 from collections.abc import Coroutine, Callable
 
 from .ws_requester import WSRequester
+from .tools.validator import Validator
+from .bot_context import BotContext
 from .event_handlers import EVENT_HANDLERS
 from .tools.logger import setup_logger
-from .tools.validator import Validator
 from .highrise_api import HighriseApi
-from .cache.cache import CacheManager
 from .cache.room_users import RoomUsersCache
 from .bot_hooks import BotHooks
 from .configs import BotConfig
 from .tools.awaiter import Awaiter
 from .decorators.loop_task import LoopTask
 from .tools.roles import Roles
-from .metrics import Metrics
 from .webapi import WebApi
 
 from .models.events import *
 from .models.highrise_models import *
 from .constants import HIGHRISE_WS_URI, EVENT_HOOK_MAP
-
-class BotContext:
-    """SDK-Level shared mutable state and dependencies."""
-
-    def __init__(self, requester: "WSRequester", validator: "Validator") -> None:
-        self.requester = requester
-        self.validator = validator
-        self.session_metadata: SessionMetadata | None = None
-        self.credentials: Credentials | None = None
-        self.cache = CacheManager()
-        self.metrics = Metrics()
 
 class BaseBot(BotHooks):
     """A base class for Highrise bots.
