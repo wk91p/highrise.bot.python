@@ -8,21 +8,20 @@ from typing import Any
 from collections.abc import Coroutine, Callable
 
 from .ws_requester import WSRequester
-from .tools.validator import Validator
+from .misc.validator import Validator
 from .bot_context import BotContext
 from .event_handlers import EVENT_HANDLERS
-from .tools.logger import setup_logger
-from .highrise_api import HighriseApi
+from .misc.logger import setup_logger
+from .misc.highrise_api import HighriseApi
 from .cache.room_users import RoomUsersCache
 from .bot_hooks import BotHooks
 from .configs import BotConfig
-from .tools.awaiter import Awaiter
+from .misc.awaiter import Awaiter
 from .decorators.loop_task import LoopTask
-from .tools.roles import Roles
+from .misc.roles import Roles
 from .webapi import WebApi
 
-from .models.events import *
-from .models.highrise_models import *
+from .models.highrise.highrise_models import *
 from .constants import HIGHRISE_WS_URI, EVENT_HOOK_MAP
 
 class BaseBot(BotHooks):

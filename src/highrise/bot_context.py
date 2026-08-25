@@ -1,9 +1,8 @@
 from .ws_requester import WSRequester
-from .tools.validator import Validator
+from .misc.validator import Validator
 from .cache.cache import CacheManager
 from .metrics import Metrics
-from .models.highrise_models import Credentials
-from .models.events import SessionMetadata
+from .models.highrise.highrise_models import SessionMetadata, Credentials
 
 class BotContext:
     """SDK-Level shared mutable state and dependencies."""

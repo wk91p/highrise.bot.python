@@ -1,7 +1,6 @@
 from typing import Any
 
-from .models.events import *
-from .models.highrise_models import *
+from .models.highrise.highrise_models import *
 
 class BotHooks:
     """Default no-op implementations for all bot lifecycle and event hooks.

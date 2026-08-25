@@ -1,4 +1,4 @@
-from .models.highrise_models import OutfitItem
+from .models.highrise.highrise_models import OutfitItem
 
 WEBSOCKET_EVENTS = [
     'SessionMetadata', 'ChatEvent', 'UserMovedEvent', 

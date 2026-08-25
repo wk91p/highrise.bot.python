@@ -1,5 +1,5 @@
 from typing import TypeVar, Generic
-from ..models.responses import (
+from ..models.highrise.responses import (
     GetUserOutfitResponse
 )
 

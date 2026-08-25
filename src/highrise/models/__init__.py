@@ -1,4 +1,4 @@
-from .events import (
+from .highrise.highrise_models import (
     User,
     Position,
     AnchorPosition,
@@ -12,7 +12,7 @@ from .events import (
     RoomInfo
 )
 
-from .highrise_models import (
+from .highrise.highrise_models import (
     ConversationEntry,
     OutfitItem,
     RoomPermissions,
@@ -21,7 +21,7 @@ from .highrise_models import (
     Credentials
 )
 
-from .webapi_models import (
+from .webapi.webapi_models import (
     ItemCategory,
     Rarity,
     LegacyRewardCategory,

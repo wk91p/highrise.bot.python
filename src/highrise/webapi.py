@@ -3,11 +3,11 @@ from .constants import WEBAPI_BASE_URL
 from typing import Any, TYPE_CHECKING
 from collections.abc import Callable
 
-from .webapi_mixins.users import UsersWebMixin
-from .webapi_mixins.rooms import RoomsWebMixin
-from .webapi_mixins.posts import PostsWebMixin
-from .webapi_mixins.items import ItemsWebMixin
-from .webapi_mixins.grabs import GrabsWebMixin
+from .mixins.webapi.users import UsersWebMixin
+from .mixins.webapi.rooms import RoomsWebMixin
+from .mixins.webapi.posts import PostsWebMixin
+from .mixins.webapi.items import ItemsWebMixin
+from .mixins.webapi.grabs import GrabsWebMixin
 
 if TYPE_CHECKING:
     from .base_bot import BotContext

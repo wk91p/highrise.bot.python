@@ -1,9 +1,9 @@
 from .base_bot import BaseBot
 from websockets import State as State
-from .tools.validator import Validator
-from .tools.logger import setup_logger, LoggerLevel
-from .tools.command_handler import CommandHandler, Command
-from .tools.roles import Roles
+from .misc.validator import Validator
+from .misc.logger import setup_logger, LoggerLevel
+from .misc.command_handler import CommandHandler, Command
+from .misc.roles import Roles
 from .configs import BotConfig, ConnectionConfig, LoggerConfig, AutoFetchConfig, RolesConfig
-from .utils import Utils
+from .misc.utils import Utils
 from .webapi import WebApi

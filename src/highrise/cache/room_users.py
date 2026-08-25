@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from ..models.events import *
-from ..models.responses import GetRoomUsersResponse
+from ..models.highrise.highrise_models import *
+from ..models.highrise.responses import GetRoomUsersResponse
 
 @dataclass
 class RoomUsersCache:

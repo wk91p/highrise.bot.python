@@ -3,8 +3,7 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from .base_bot import BaseBot
 
-from .models.events import *
-from .models.highrise_models import *
+from .models.highrise.highrise_models import *
 
 
 def _parse_user(data: dict | None) -> "User":
