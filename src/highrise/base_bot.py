@@ -11,10 +11,10 @@ from .webapi import WebApi
 from .cache.room_users import RoomUsersCache
 from .configs import BotConfig
 
-from .misc.logger import setup_logger
-from .misc.validator import Validator
-from .misc.awaiter import Awaiter
-from .misc.roles import Roles
+from .tools.logger import setup_logger
+from .tools.validator import Validator
+from .tools.awaiter import Awaiter
+from .tools.roles import Roles
 
 from .core.ws_requester import WSRequester
 from .core.bot_context import BotContext
@@ -38,9 +38,6 @@ class BaseBot(BotHooks):
             show_time=self.config.logger.show_time,
         )
 
-        self._connection = ConnectionManager(bot=self)
-        self._tasks = TaskManager(bot=self)
-
         requester = WSRequester(lambda: self._connection.ws_client, self.logger)
         validator = Validator()
         self._context = BotContext(requester, validator)
@@ -50,6 +47,9 @@ class BaseBot(BotHooks):
         self.awaiter = Awaiter()
         self.roles = Roles(path=self.config.roles.path)
         self.webapi = WebApi(self._context)
+
+        self._connection = ConnectionManager(bot=self)
+        self._tasks = TaskManager(bot=self)
 
         self._event_params = self._get_requested_events()
 

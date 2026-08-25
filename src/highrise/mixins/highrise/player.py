@@ -19,7 +19,7 @@ from ...models.highrise.requests import (
 
 from ...models.highrise.highrise_models import *
 
-from ...misc.utils import Utils
+from ...tools.utils import Utils
 
 TIP_SPLIT_DELAY = 0.4
 

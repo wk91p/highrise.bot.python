@@ -3,7 +3,7 @@ import time
 from typing import Callable, Coroutine, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..misc.logger import Logger
+    from ..tools.logger import Logger
 
 class LoopTask:
     def __init__(

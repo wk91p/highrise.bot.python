@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from .misc.logger import LoggerLevel
+from .tools.logger import LoggerLevel
 
 @dataclass
 class ConnectionConfig:

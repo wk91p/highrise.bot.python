@@ -1,7 +1,7 @@
 from .ws_requester import WSRequester
-from ..misc.validator import Validator
+from ..tools.validator import Validator
 from ..cache.cache import CacheManager
-from ..misc.metrics import Metrics
+from ..tools.metrics import Metrics
 from ..models.highrise.highrise_models import SessionMetadata, Credentials
 
 class BotContext:
