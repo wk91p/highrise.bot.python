@@ -12,7 +12,7 @@ from .misc.validator import Validator
 from .bot_context import BotContext
 from .event_handlers import EVENT_HANDLERS
 from .misc.logger import setup_logger
-from .misc.highrise_api import HighriseApi
+from .highrise_api import HighriseApi
 from .cache.room_users import RoomUsersCache
 from .bot_hooks import BotHooks
 from .configs import BotConfig
