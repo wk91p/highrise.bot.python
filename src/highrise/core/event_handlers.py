@@ -1,15 +1,13 @@
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from .base_bot import BaseBot
+    from ..base_bot import BaseBot
 
-from .models.highrise.highrise_models import *
-
+from ..models.highrise.highrise_models import *
 
 def _parse_user(data: dict | None) -> "User":
     data = data or {}
     return User(data.get("id", ""), data.get("username", ""))
-
 
 def _parse_position(pos_data: dict) -> "Position":
     """Parses position coordinates rounded to exactly one decimal place."""
@@ -20,12 +18,10 @@ def _parse_position(pos_data: dict) -> "Position":
         pos_data.get("facing"),
     )
 
-
 def handle_session_metadata(bot: "BaseBot", data: dict[str, Any]) -> None:
     metadata = SessionMetadata._from_raw(data)
     bot._context.session_metadata = metadata
-    bot._create_task(bot.on_start(metadata), "on_start")
-
+    bot._tasks.create_task(bot.on_start(metadata), "on_start")
 
 def handle_chat_event(bot: "BaseBot", data: dict[str, Any]) -> None:
     user_data = data.get("user") or {}
@@ -35,11 +31,10 @@ def handle_chat_event(bot: "BaseBot", data: dict[str, Any]) -> None:
 
     if is_whisper:
         bot.awaiter._feed("on_whisper", (user, message))
-        bot._create_task(bot.on_whisper(user, message), "on_whisper")
+        bot._tasks.create_task(bot.on_whisper(user, message), "on_whisper")
     else:
         bot.awaiter._feed("on_chat", (user, message))
-        bot._create_task(bot.on_chat(user, message), "on_chat")
-
+        bot._tasks.create_task(bot.on_chat(user, message), "on_chat")
 
 def handle_user_join(bot: "BaseBot", data: dict[str, Any]) -> None:
     user = _parse_user(data.get("user"))
@@ -47,16 +42,14 @@ def handle_user_join(bot: "BaseBot", data: dict[str, Any]) -> None:
 
     bot.cached_users._add(user, position)
 
-    bot._create_task(bot.on_user_join(user, position), "on_user_join")
-
+    bot._tasks.create_task(bot.on_user_join(user, position), "on_user_join")
 
 def handle_user_leave(bot: "BaseBot", data: dict[str, Any]) -> None:
     user = _parse_user(data.get("user"))
 
     bot.cached_users._remove(user.id)
 
-    bot._create_task(bot.on_user_leave(user), "on_user_leave")
-
+    bot._tasks.create_task(bot.on_user_leave(user), "on_user_leave")
 
 def handle_user_moved(bot: "BaseBot", data: dict[str, Any]) -> None:
     user = _parse_user(data.get("user"))
@@ -76,16 +69,14 @@ def handle_user_moved(bot: "BaseBot", data: dict[str, Any]) -> None:
             position = _parse_position(pos_data)
             bot.cached_users._update(user.id, position)
 
-    bot._create_task(bot.on_user_move(user, position, anchor), "on_user_move")
-
+    bot._tasks.create_task(bot.on_user_move(user, position, anchor), "on_user_move")
 
 def handle_reaction_event(bot: "BaseBot", data: dict[str, Any]) -> None:
     user = _parse_user(data.get("sender"))
     reaction = data.get("reaction", "")
     receiver = _parse_user(data.get("receiver"))
 
-    bot._create_task(bot.on_reaction(user, reaction, receiver), "on_reaction")
-
+    bot._tasks.create_task(bot.on_reaction(user, reaction, receiver), "on_reaction")
 
 def handle_tip_reaction(bot: "BaseBot", data: dict[str, Any]) -> None:
     sender = _parse_user(data.get("sender"))
@@ -94,8 +85,7 @@ def handle_tip_reaction(bot: "BaseBot", data: dict[str, Any]) -> None:
     item = Item(item_data.get("type"), item_data.get("amount"))
 
     bot.awaiter._feed("on_tip", (sender, receiver, item))
-    bot._create_task(bot.on_tip(sender, receiver, item), "on_tip")
-
+    bot._tasks.create_task(bot.on_tip(sender, receiver, item), "on_tip")
 
 def handle_emote_event(bot: "BaseBot", data: dict[str, Any]) -> None:
     user = _parse_user(data.get("user"))
@@ -103,7 +93,7 @@ def handle_emote_event(bot: "BaseBot", data: dict[str, Any]) -> None:
     receiver = _parse_user(data.get("receiver"))
 
     bot.awaiter._feed("on_emote", (user, emote_id, receiver))
-    bot._create_task(bot.on_emote(user, emote_id, receiver), "on_emote")
+    bot._tasks.create_task(bot.on_emote(user, emote_id, receiver), "on_emote")
 
 async def _handle_message_event(bot: "BaseBot", data: dict[str, Any]) -> None:
     conversation_id = data.get("conversation_id", "")
@@ -120,14 +110,13 @@ async def _handle_message_event(bot: "BaseBot", data: dict[str, Any]) -> None:
             message = Message(response.messages[0].content)
 
     bot.awaiter._feed("on_message", (user_id, message, conversation))
-    bot._create_task(
+    bot._tasks.create_task(
         bot.on_message(user_id, message, conversation),
         "on_message",
     )
 
-
 def handle_message_event(bot: "BaseBot", data: dict[str, Any]) -> None:
-    bot._create_task(_handle_message_event(bot, data), "handle_message_event")
+    bot._tasks.create_task(_handle_message_event(bot, data), "handle_message_event")
 
 
 def handle_room_moderate(bot: "BaseBot", data: dict[str, Any]) -> None:
@@ -140,16 +129,14 @@ def handle_room_moderate(bot: "BaseBot", data: dict[str, Any]) -> None:
         moderation_type = "unmute"
 
     action = ModerationAction(type=moderation_type, duration=duration)
-    bot._create_task(bot.on_moderate(moderator_id, target_id, action), "on_moderate")
-
+    bot._tasks.create_task(bot.on_moderate(moderator_id, target_id, action), "on_moderate")
 
 def handle_channel_event(bot: "BaseBot", data: dict[str, Any]) -> None:
     message = data.get("message", "")
-    bot._create_task(
+    bot._tasks.create_task(
         bot.on_channel(data.get("sender_id", ""), message, data.get("tags", [])),
         "on_channel",
     )
-
 
 EVENT_HANDLERS = {
     "SessionMetadata": handle_session_metadata,

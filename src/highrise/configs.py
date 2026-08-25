@@ -17,8 +17,8 @@ class LoggerConfig:
 
 @dataclass
 class AutoFetchConfig:
-    room_users: bool = False
-    direct_message: bool = False
+    room_users: bool = True
+    direct_message: bool = True
 
 @dataclass
 class RolesConfig:
