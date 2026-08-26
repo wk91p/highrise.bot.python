@@ -7,3 +7,4 @@ from .tools.roles import Roles
 from .configs import BotConfig, ConnectionConfig, LoggerConfig, AutoFetchConfig, RolesConfig
 from .tools.utils import Utils
 from .webapi import WebApi
+from .cache.cache import Cache

@@ -5,7 +5,6 @@ from ..models.highrise.responses import (
 
 T = TypeVar("T")
 
-
 class Cache(Generic[T]):
     """A simple key/value cache with no expiry. Entries live until
     explicitly invalidated or cleared."""
