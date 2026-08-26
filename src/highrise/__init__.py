@@ -1,5 +1,5 @@
 from .base_bot import BaseBot
-from websockets import State as State
+from websockets import State
 from .tools.validator import Validator
 from .tools.logger import setup_logger, LoggerLevel
 from .tools.command_handler import CommandHandler, Command
