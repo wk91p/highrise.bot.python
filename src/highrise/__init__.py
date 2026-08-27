@@ -8,3 +8,4 @@ from .configs import BotConfig, ConnectionConfig, LoggerConfig, AutoFetchConfig,
 from .tools.utils import Utils
 from .webapi import WebApi
 from .cache.cache import Cache
+from .tools.loop_task import LoopTask

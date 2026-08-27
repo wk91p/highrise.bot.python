@@ -50,14 +50,11 @@ class ConnectionManager:
 
     @property
     def is_connected(self) -> bool:
-        return self.state == State.OPEN
+        return self._ws is not None and self.state == State.OPEN
 
     @property
     def is_paused(self) -> bool:
         return self._is_paused
-
-    def _is_open(self) -> bool:
-        return self._ws is not None and self._ws.state == State.OPEN
 
     async def login(self, room_id: str, api_token: str, auto_reconnect: bool = True) -> None:
         """Connects to the Highrise WebSocket API with only the requested events."""
@@ -165,16 +162,16 @@ class ConnectionManager:
         self.bot._tasks.create_task(self._send_keepalive(), name="keepalive")
         self.bot._tasks.start_all_loops()
 
-        while self._is_running and self._ws is not None:
+        while self._is_running and self.is_connected:
             raw_frame = await self._ws.recv()
             await self._handle_raw_frame(raw_frame)
 
     async def _send_keepalive(self) -> None:
         try:
-            while self._is_running and self._ws is not None:
+            while self._is_running and self.is_connected:
                 await asyncio.sleep(self._keepalive_delay)
 
-                if self._ws and self._is_open():
+                if self.is_connected:
                     start = time.monotonic()
                     success, _ = await self.bot._context.requester.send(self._keepalive_payload)
                     if success:

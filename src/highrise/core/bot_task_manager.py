@@ -4,7 +4,7 @@ from typing import Any, TYPE_CHECKING
 from collections.abc import Callable, Coroutine
 
 from ..cache.room_users import RoomUsersCache
-from ..decorators.loop_task import LoopTask
+from ..tools.loop_task import LoopTask
 
 if TYPE_CHECKING:
     from ..base_bot import BaseBot
@@ -35,9 +35,6 @@ class TaskManager:
         return task
 
     def register_loop(self, seconds: float, func: Callable[[], Coroutine[Any, Any, None]]) -> None:
-        if not inspect.iscoroutinefunction(func):
-            raise TypeError(f"Loop decorators can only wrap async functions, not '{type(func).__name__}'")
-
         loop_task = LoopTask(coro_fn=func, seconds=seconds, logger=self.bot.logger)
         self._loops.append(loop_task)
 
@@ -67,7 +64,7 @@ class TaskManager:
 
     async def _autosave_roles_loop(self) -> None:
         try:
-            while self.bot._connection._is_running:
+            while self.bot._connection.is_connected():
                 await asyncio.sleep(self.bot.config.roles.autosave_interval)
                 self.bot.roles.save()
         except asyncio.CancelledError:
