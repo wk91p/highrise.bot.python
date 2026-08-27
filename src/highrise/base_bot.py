@@ -16,11 +16,11 @@ from .tools.validator import Validator
 from .tools.awaiter import Awaiter
 from .tools.roles import Roles
 
-from .core.ws_requester import WSRequester
+from .core.bot_ws_requester import WSRequester
 from .core.bot_context import BotContext
 from .core.bot_hooks import BotHooks
-from .core.connection_manager import ConnectionManager
-from .core.task_manager import TaskManager
+from .core.bot_connection_manager import ConnectionManager
+from .core.bot_task_manager import TaskManager
 
 from .models.highrise.highrise_models import *
 

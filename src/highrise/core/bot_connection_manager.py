@@ -8,7 +8,7 @@ from typing import Any, TYPE_CHECKING
 from ..models.highrise.highrise_models import Credentials
 from ..constants import HIGHRISE_WS_URI
 
-from .event_handlers import EVENT_HANDLERS
+from .bot_event_handlers import EVENT_HANDLERS
 
 if TYPE_CHECKING:
     from ..base_bot import BaseBot

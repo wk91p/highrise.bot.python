@@ -1,4 +1,4 @@
-from .ws_requester import WSRequester
+from .bot_ws_requester import WSRequester
 from ..tools.validator import Validator
 from ..cache.cache import CacheManager
 from ..tools.metrics import Metrics
