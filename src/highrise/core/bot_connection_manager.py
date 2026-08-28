@@ -185,14 +185,14 @@ class ConnectionManager:
     async def _handle_raw_frame(self, raw_frame: str) -> None:
         """Handle the raw frame coming from highrise websocket server"""
         try:
-            if self._is_paused:
-                return
-            
             data = json.loads(raw_frame)
 
             if self.bot._context.requester.handle_incoming_response(data):
                 return
 
+            if self._is_paused:
+                return
+            
             await self._dispatch_events(data)
         except json.JSONDecodeError as e:
             self.bot.logger.error(f"Failed to parse incoming frame: {e}")
