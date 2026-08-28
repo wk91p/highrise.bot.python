@@ -213,7 +213,7 @@ class MyBot(BaseBot):
 
 ### Manual Loops with `LoopTask`
 
-For complete control over a background loop, such as starting, stopping, or canceling it dynamically based on game events, use `LoopTask`. It features automatic execution-time compensation to prevent interval drift and isolates exceptions to keep your main bot process alive.
+For complete control over a background loop, such as starting or stopping it dynamically based on game events, use `LoopTask`. It features automatic execution-time compensation to prevent interval drift and isolates exceptions to keep your main bot process alive.
 
 ```python
 from highrise import BaseBot, LoopTask
