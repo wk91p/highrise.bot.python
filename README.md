@@ -347,3 +347,33 @@ message.args(0)        # a specific argument by index
 message.mentions()     # all @username mentions, without the @
 message.mentions(0)    # a specific mention by index
 ```
+
+### 6. Bot-level setup (`__init__`)
+
+The official SDK's `BaseBot` has no `__init__`, just hooks, with `highrise`/`webapi` attached once before the bot connects. This SDK's `BaseBot.__init__` does real setup at construction time (`self.highrise`, `self.webapi`, `self.roles`, `self.cached_users`, etc.), so overriding `__init__` here is not the same as it was there.
+
+**Before (official SDK):**
+```python
+class MyBot(BaseBot):
+    def __init__(self):
+        self.my_setting = "something"
+```
+
+**After (this SDK):**
+
+`before_start()` runs once at `login()`, right before the bot connects, with the bot already fully constructed, so it's the safer place for your own setup and there's nothing to remember.
+```python
+class MyBot(BaseBot):
+    async def before_start(self) -> None:
+        self.my_setting = "something"
+```
+
+If you do override `__init__` here, call `super().__init__()` first or the bot will be missing everything it needs to run.
+
+```python
+class MyBot(BaseBot):
+    def __init__(self):
+        super().__init__()
+        self.my_setting = "something"
+
+```
