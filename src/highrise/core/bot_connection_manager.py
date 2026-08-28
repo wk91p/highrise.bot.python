@@ -130,13 +130,13 @@ class ConnectionManager:
         await self._cleanup()
 
     def pause(self) -> bool:
-        if self._is_paused:
+        if self.is_paused:
             return False
         self._is_paused = True
         return True
 
     def resume(self) -> bool:
-        if not self._is_paused:
+        if not self.is_paused:
             return False
         self._is_paused = False
         return True
@@ -190,7 +190,7 @@ class ConnectionManager:
             if self.bot._context.requester.handle_incoming_response(data):
                 return
 
-            if self._is_paused:
+            if self.is_paused:
                 return
             
             await self._dispatch_events(data)
