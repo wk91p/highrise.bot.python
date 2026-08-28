@@ -198,12 +198,10 @@ bot.resume() -> None
 ```
 Undoes `pause()`, the bot starts reacting to events again.
 
-## Decorators
+## Background Loops & Decorators
 
-```python
-@bot.loop(seconds: float)
-```
-Registers a function to run automatically on a repeating interval for as long as the bot is connected, useful for things like periodic announcements or status checks. Starts automatically as soon as the bot connects.
+### The `@bot.loop` Decorator
+Registers a function to run automatically on a repeating interval for as long as the bot is connected. This is useful for things like periodic announcements or status checks. It starts automatically as soon as the bot connects.
 
 ```python
 class MyBot(BaseBot):
@@ -212,6 +210,36 @@ class MyBot(BaseBot):
         async def announce():
             await self.highrise.chat("Check out our shop!")
 ```
+
+### Manual Loops with `LoopTask`
+
+For complete control over a background loop, such as starting, stopping, or canceling it dynamically based on game events, use `LoopTask`. It features automatic execution-time compensation to prevent interval drift and isolates exceptions to keep your main bot process alive.
+
+```python
+from highrise import BaseBot, LoopTask
+
+async def global_announcement():
+    print("This runs independently of the main bot class.")
+
+class MyBot(BaseBot):
+    async def before_start(self) -> None:
+        # Create a loop task (defaults to 60.0 seconds if omitted)
+        self.announcer = LoopTask(global_announcement, seconds=15.0)
+        self.announcer.start()
+
+    async def on_chat(self, user, message):
+        if message.command() == "!stop_loop" and self.roles.is_mod(user.id):
+            self.announcer.cancel()
+            await self.highrise.chat("Background loop killed.")
+```
+
+#### `LoopTask` API
+
+* **`LoopTask(coro_fn, seconds=60.0, logger=None)`**: Initializes the wrapper. Raises a `TypeError` if a non-async function is provided.
+* **`start()`**: Spawns the task in the background loop. Safely ignores duplicate execution requests if already running.
+* **`cancel()`**: Gracefully terminates the running task loop.
+* **`get_loop_task`**: Property that returns the active `asyncio.Task` wrapper instance, or `None` if inactive.
+
 
 ## BaseBot properties
 
