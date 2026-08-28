@@ -230,7 +230,7 @@ class MyBot(BaseBot):
     async def on_chat(self, user, message):
         if message.command() == "!stop_loop" and self.roles.is_mod(user.id):
             self.announcer.cancel()
-            await self.highrise.chat("Background loop killed.")
+            await self.highrise.chat("Background loop stopped.")
 ```
 
 #### `LoopTask` API
