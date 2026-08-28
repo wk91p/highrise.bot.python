@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Literal
+import math
 
 Facing = Literal["FrontRight", "FrontLeft", "BackRight", "BackLeft"]
 ModerationType = Literal["kick", "mute", "ban", "unban", "unmute"]
@@ -54,6 +55,27 @@ class Position:
     y: int
     z: int
     facing: Facing
+
+    def distance_to(self, other: "Position") -> float:
+        """Calculate the 3D distance to another position."""
+        return math.sqrt(
+            (self.x - other.x) ** 2 +
+            (self.y - other.y) ** 2 +
+            (self.z - other.z) ** 2
+        )
+
+    def offset(self, dx: int = 0, dy: int = 0, dz: int = 0) -> "Position":
+        """Return a new Position shifted by the given values, keeping the facing direction."""
+        return Position(
+            x=self.x + dx,
+            y=self.y + dy,
+            z=self.z + dz,
+            facing=self.facing
+        )
+
+    def as_tuple(self) -> tuple[int, int, int]:
+        """Return the coordinates as a simple (x, y, z) tuple, ignoring facing direction."""
+        return (self.x, self.y, self.z)
 
 @dataclass
 class AnchorPosition:
