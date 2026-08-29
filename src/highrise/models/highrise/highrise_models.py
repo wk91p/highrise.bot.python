@@ -54,7 +54,7 @@ class Position:
     x: int
     y: int
     z: int
-    facing: Facing
+    facing: Facing = "FrontRight"
 
     def distance_to(self, other: "Position") -> float:
         """Calculate the 3D distance to another position."""
