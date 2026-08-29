@@ -8,6 +8,7 @@ SortOptions = Literal["desc", "asc"]
 
 @unique
 class ItemCategory(str, Enum):
+    """Every equippable item category on Highrise."""
     BAG = "bag"
     BLUSH = "blush"
     BODY = "body"
@@ -42,9 +43,10 @@ class ItemCategory(str, Enum):
     TATTOO = "tattoo"
     ROD = "rod"
     AURA = "aura"
-
+    
 @unique
 class Rarity(str, Enum):
+    """Item rarity tiers, from most to least common."""
     COMMON = "common"
     UNCOMMON = "uncommon"
     RARE = "rare"
@@ -52,9 +54,10 @@ class Rarity(str, Enum):
     LEGENDARY = "legendary"
     MYTHICAL = 'mythical'
     NONE = "none_"
-
+    
 @unique
 class LegacyRewardCategory(str, Enum):
+    """Currency/reward types a Reward can grant."""
     POPS = "pops"
     GEMS = "gems"
     OUTFIT = "outfit"
@@ -76,20 +79,21 @@ class LegacyRewardCategory(str, Enum):
     CASH = "cash"
     CUSTOM_CURRENCY = "custom_currency"
     PET = "pet"
-
+    
 @unique
 class NFIStrategy(str, Enum):
+    """How a non-fungible item's numbered instances are allocated."""
     SEQUENTIAL = "sequential"
     TOTAL_DEFINED = "total_defined"
     POOL = "pool"
-
+    
 @dataclass(frozen=True)
 class WebOutfitItemColors:
     """Color/palette data for a single web-API outfit item."""
     dependent_colors: Sequence[str] = field(default_factory=tuple)
     palettes: Sequence[list] = field(default_factory=tuple)
     linked_colors: str = ""
-
+    
 @dataclass(frozen=True)
 class WebOutfitItem:
     """A single outfit item as returned by the public web API.
@@ -100,20 +104,20 @@ class WebOutfitItem:
     active_palette: int
     parts: list[tuple[str, str]]
     colors: WebOutfitItemColors | None = None
-
+    
 @dataclass(frozen=True)
 class ActiveRoomInfo:
     """The room a user is currently active in, if any."""
     id: str
     display_name: str
     code_name: str | None
-
+    
 @dataclass(frozen=True)
 class Crew:
     """A user's crew."""
     id: str
     name: str
-
+    
 @dataclass(frozen=True)
 class PublicUser:
     """A user's public profile, as returned by `GET /users/{user_id}`."""
@@ -131,7 +135,7 @@ class PublicUser:
     voice_enabled: bool
     discord_id: str | None = None
     outfit: list[WebOutfitItem] = field(default_factory=list)
-
+    
 @dataclass(frozen=True)
 class PublicRoomBasic:
     """A lighter room shape, as returned by `GET /rooms` (list endpoint)."""
@@ -146,50 +150,53 @@ class PublicRoomBasic:
     locale: list[str] = field(default_factory=list)
     designer_ids: list[str] = field(default_factory=list)
     moderator_ids: list[str] = field(default_factory=list)
-
+    
 @dataclass(frozen=True)
 class PublicRoom(PublicRoomBasic):
-    """A room's public data, as returned by `GET /rooms/{room_id}`"""
-    num_connected: int = 0
+    """A room's public data, as returned by `GET /rooms/{room_id}`.
+    Extends PublicRoomBasic with fields only present on the single-room endpoint."""
+    num_connected: int = 0  
     crew_id: str | None = None
     bots: str | None = None
     indicators: str | None = None
     thumbnail_url: str | None = None
     banner_url: str | None = None
-
+    
 @dataclass(frozen=True)
 class PostItem:
-    """ Single post item """
+    """Single post item"""
     item_id: str
     active_palette: int = 0
     account_bound: bool = False
-
+    
 @dataclass(frozen=True)
 class PostInventory:
+    """The set of items attached to a post."""
     items: list[PostItem] = field(default_factory=list)
-
+    
 @dataclass(frozen=True)
 class PostBody:
+    """A post's text content plus any attached inventory items."""
     text: str
     inventory: PostInventory
-
+    
 @dataclass(frozen=True)
 class Comment:
-    """ Single post comment """
+    """Single post comment"""
     id: str
     content: str
     post_id: str
     author_id: str
     author_name: str
     num_likes: int
-
+    
 @dataclass(frozen=True)
 class PublicPostBasic:
-    """ A lighter post shape, as returned by `GET /post` (list endpoint)"""
+    """A lighter post shape, as returned by `GET /post` (list endpoint)"""
     post_id: str
     author_id: str | None = None
     created_at: str | None = None
-    file_key: str | None = None
+    file_key: str | None = None  
     type: str | None = None
     visibility: str = "private"
     num_comments: int = 0
@@ -198,12 +205,13 @@ class PublicPostBasic:
     body: PostBody | None = None
     caption: str | None = None
     featured_user_ids: list[str] = field(default_factory=list)
-
+    
 @dataclass(frozen=True)
 class PublicPost(PublicPostBasic):
-    """A post's public data, as returned by `GET /post/{post_id}`"""
+    """A post's public data, as returned by `GET /post/{post_id}`.
+    Extends PublicPostBasic with comments, only present on the single-post endpoint."""
     comments: list[Comment] = field(default_factory=list)
-
+    
 @dataclass(frozen=True)
 class SkinPart:
     """A single skin part attachment on an item."""
@@ -212,7 +220,7 @@ class SkinPart:
     image_file: str
     attachment_name: str | None = None
     has_remote_render_layer: bool | None = None
-
+    
 @dataclass(frozen=True)
 class ItemBasic:
     """A single item, as returned by `GET /items/search`."""
@@ -237,105 +245,110 @@ class ItemBasic:
     pops_sale_price: int | None = None
     rarity: Rarity = Rarity.NONE
     release_date: datetime | None = None
-
+    
 @dataclass(frozen=True)
 class Item(ItemBasic):
     """A full item, as returned by `GET /items/{item_id}`."""
     acquisition_cost: int | None = None
     acquisition_amount: int | None = None
     acquisition_currency: str | None = None
-
+    
 @dataclass(frozen=True)
 class Affiliation:
+    """A collection/event an item or grab is associated with."""
     id: str
     title: str
     type: str
     event_type: str | None = None
-
+    
 @dataclass(frozen=True)
 class RelatedItem:
+    """A lightweight reference to another item, used in RelatedItems."""
     item_id: str
     disp_name: str
     rarity: Rarity = Rarity.NONE
-
+    
 @dataclass(frozen=True)
 class RelatedItems:
+    """Items and affiliations related to a given item, returned alongside `GetPublicItemResponse`."""
     affiliations: list[Affiliation] = field(default_factory=list)
     items: list[RelatedItem] = field(default_factory=list)
-
+    
 @dataclass(frozen=True)
 class Seller:
+    """A user currently selling an item on the storefront."""
     user_id: str
     username: str
     outfit: list[WebOutfitItem] = field(default_factory=list)
     last_connected_at: datetime | None = None
-
+    
 @dataclass(frozen=True)
 class StorefrontListings:
+    """Active sellers for an item, returned alongside `GetPublicItemResponse`."""
     sellers: list[Seller] = field(default_factory=list)
     pages: int = 0
     total: int = 0
-
-class NFIStrategy(str, Enum):
-    SEQUENTIAL = "sequential"
-    TOTAL_DEFINED = "total_defined"
-    POOL = "pool"
-
-
+    
 @dataclass(frozen=True)
 class NFIItemMetadata:
+    """Identifies a specific numbered instance of a non-fungible item."""
     item_number: int
     stack_id: str
-
+    
 
 @dataclass(frozen=True)
 class NFITemplateMetadata:
+    """Allocation rules for a non-fungible item template."""
     strategy: NFIStrategy
     total_amount: int | None = None
-
+    
 
 @dataclass(frozen=True)
 class ItemMetadata:
+    """Non-fungible item metadata attached to a Reward, if applicable."""
     nfi_metadata: NFIItemMetadata | None = None
     nfi_template_metadata: NFITemplateMetadata | None = None
-
+    
 
 @dataclass(frozen=True)
 class Reward:
+    """A single reward or cost entry within a Grab."""
     category: LegacyRewardCategory
     amount: int
     reward_id: str = ""
     item_id: str | None = None
     account_bound: bool = False
     metadata: ItemMetadata | None = None
-
+    
 
 @dataclass(frozen=True)
 class LimitedKompuReward:
+    """A time-limited bonus rewards granted once all costs in a Grab are collected."""
     expires_at: datetime | None = None
     rewards: list[Reward] = field(default_factory=list)
-
+    
 
 @dataclass(frozen=True)
 class ProgressReward:
-    rewards_at: int
+    """A bonus reward granted after reaching a specific progress threshold in a Grab."""
+    rewards_at: int  
     rewards: list[Reward] = field(default_factory=list)
-
-
+    
 @dataclass(frozen=True)
 class Grab:
+    """A Grab event, as returned by `GET /grabs/{grab_id}`."""
     grab_id: str
     title: str
     description: str
-    background_color: tuple[int, int, int]
+    background_color: tuple[int, int, int]  
     banner_img_url: str
     starts_at: datetime | None = None
     expires_at: datetime | None = None
     rewards: list[Reward] = field(default_factory=list)
     primary_img_url: str | None = None
     secondary_img_url: str | None = None
-    costs: list[Reward] = field(default_factory=list)
-    kompu_rewards: list[Reward] = field(default_factory=list)
+    costs: list[Reward] = field(default_factory=list)  
+    kompu_rewards: list[Reward] = field(default_factory=list)  
     is_tradable: bool = True
     limited_time_kompu: LimitedKompuReward | None = None
     progress_reward: ProgressReward | None = None
