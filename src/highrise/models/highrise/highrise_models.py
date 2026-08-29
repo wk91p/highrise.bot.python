@@ -51,9 +51,9 @@ class Receiver(User):
 @dataclass
 class Position:
     """A player's position in the room."""
-    x: int
-    y: int
-    z: int
+    x: float
+    y: float
+    z: float
     facing: Facing = "FrontRight"
 
     def distance_to(self, other: "Position") -> float:

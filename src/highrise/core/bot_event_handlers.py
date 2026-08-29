@@ -10,11 +10,10 @@ def _parse_user(data: dict | None) -> "User":
     return User(data.get("id", ""), data.get("username", ""))
 
 def _parse_position(pos_data: dict) -> "Position":
-    """Parses position coordinates rounded to exactly one decimal place."""
     return Position(
-        round(float(pos_data.get("x", 0.0)), 1),
-        round(float(pos_data.get("y", 0.0)), 1),
-        round(float(pos_data.get("z", 0.0)), 1),
+        pos_data.get("x", 0.0),
+        pos_data.get("y", 0.0),
+        pos_data.get("z", 0.0),
         pos_data.get("facing"),
     )
 
