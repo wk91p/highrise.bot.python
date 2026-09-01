@@ -134,6 +134,9 @@ class PublicUser:
     crew: Crew | None
     voice_enabled: bool
     discord_id: str | None = None
+    icon_url: str | None = None
+    avatar_url: str | None = None
+    avatar_svg: str | None = None
     outfit: list[WebOutfitItem] = field(default_factory=list)
     
 @dataclass

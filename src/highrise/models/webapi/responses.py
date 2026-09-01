@@ -58,6 +58,9 @@ class GetPublicUserResponse(BaseResponse):
             crew=crew,
             voice_enabled=raw.get("voice_enabled", False),
             discord_id=raw.get("discord_id"),
+            icon_url=raw.get("icon_url"),
+            avatar_url=raw.get("avatar_url"),
+            avatar_svg=raw.get("avatar_svg"),
         )
 
 @dataclass
@@ -67,7 +70,8 @@ class GetPublicRoomResponse(BaseResponse):
 
     def _build(self, data: dict):
         raw_room = data.get('room', {})
-        self.raw_room = PublicRoom(
+
+        self.room = PublicRoom(
             room_id=raw_room.get('room_id', ''),
             access_policy=raw_room.get('access_policy', ''),
             banner_url=raw_room.get('banner_url', ''),
@@ -98,6 +102,7 @@ class GetPublicRoomsResponse(BaseResponse):
 
     def _build(self, data: dict) -> None:
         raw_rooms = data.get("rooms", [])
+        
         self.rooms = [self._parse_room(r) for r in raw_rooms]
         self.total = data.get("total", 0)
         self.first_id = data.get("first_id", "")
