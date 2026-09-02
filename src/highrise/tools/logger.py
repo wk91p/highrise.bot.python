@@ -28,26 +28,32 @@ class SDKFormatter(logging.Formatter):
         LoggerLevel.CRITICAL: BOLD_RED,
     }
 
-    def __init__(self, show_time: bool = False):
+    def __init__(self, show_time: bool = False, use_color: bool = True):
         super().__init__()
         self.show_time = show_time
-        self.time_part = "[%(asctime)s] " if show_time else ""
+        self.use_color = use_color
+        self.time_part = "[%(asctime)s] - " if show_time else ""
         self._formatters: dict[int, logging.Formatter] = {}
 
     def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:
-        """Formats timestamp into YYYY/MM/DD - HH:MM AM/PM UTC format."""
+        """Formats timestamp into YYYY/MM/DD | HH:MM:SS (24h) UTC format."""
         dt = datetime.fromtimestamp(record.created, tz=timezone.utc)
-        return dt.strftime("%Y/%m/%d - %I:%M %p")
+        return dt.strftime("%Y/%m/%d | %H:%M:%S")
 
     def format(self, record: logging.LogRecord) -> str:
-        level_color = self.LEVEL_COLORS.get(record.levelno, self.RESET)
-
         formatter = self._formatters.get(record.levelno)
         if formatter is None:
+            if self.use_color:
+                level_color = self.LEVEL_COLORS.get(record.levelno, self.RESET)
+                name_open, name_close = self.WHITE, self.RESET
+                level_open, level_close = level_color, self.RESET
+            else:
+                name_open = name_close = level_open = level_close = ""
+
             fmt = (
                 f"{self.time_part}"
-                f"[{self.WHITE}%(name)s{self.RESET}] "
-                f"[{level_color}%(levelname)s{self.RESET}] - %(message)s"
+                f"[{name_open}%(name)s{name_close}] - "
+                f"[{level_open}%(levelname)s{level_close}] - %(message)s"
             )
             formatter = logging.Formatter(fmt)
             if self.show_time:
@@ -67,7 +73,7 @@ def setup_logger(
     if logger.handlers:
         logger.handlers.clear()
     handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(SDKFormatter(show_time=show_time))
+    handler.setFormatter(SDKFormatter(show_time=show_time, use_color=sys.stdout.isatty()))
     logger.addHandler(handler)
     logger.propagate = False
     return logger
