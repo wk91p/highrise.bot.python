@@ -405,3 +405,29 @@ class MyBot(BaseBot):
         self.my_setting = "something"
 
 ```
+
+### 7. `send_message` / `send_message_bulk` split into three dedicated methods
+
+The official SDK has one generic `send_message(conversation_id, content, message_type, room_id, world_id)` plus a matching `send_message_bulk(user_ids, ...)`, where `message_type` decides whether it's a plain text message or an invite, and `room_id`/`world_id` only apply when it is.
+
+**Before:**
+```python
+await bot.highrise.send_message(conversation_id, "hello")
+await bot.highrise.send_message(conversation_id, "", message_type="invite", room_id=room_id)
+await bot.highrise.send_message_bulk(user_ids, "hello")
+```
+
+**After:**
+```python
+await bot.highrise.send_message(conversation_id, "hello")
+await bot.highrise.send_room_invite(conversation_id, room_id)
+await bot.highrise.send_world_invite(conversation_id, world_id)
+
+await bot.highrise.send_message(user_ids, "hello")        # bulk, up to 100 users
+await bot.highrise.send_room_invite(user_ids, room_id)    # bulk, up to 100 users
+await bot.highrise.send_world_invite(user_ids, world_id)  # bulk, up to 100 users
+```
+
+`send_message`, `send_room_invite`, and `send_world_invite` are now three separate methods instead of one method with an optional `message_type` flag and unused parameters depending on that flag. Each has its own required arguments, so you can't call `send_message` with a `room_id` that quietly gets ignored, or forget `world_id` on an invite and only find out at runtime. Bulk sending is no longer a separate method either, every one of the three accepts a single recipient or a list of up to `100`, and the right request is built automatically.
+
+`send_message` also auto-splits content over `2000` characters into multiple messages, sent `400ms` apart, which the official SDK does not do.
