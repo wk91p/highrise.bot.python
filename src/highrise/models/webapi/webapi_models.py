@@ -100,7 +100,7 @@ class WebOutfitItem:
     Distinct shape from the WebSocket API's OutfitItem."""
     item_id: str
     name: str
-    rarity: str
+    rarity: Rarity
     active_palette: int
     parts: list[tuple[str, str]]
     colors: WebOutfitItemColors | None = None

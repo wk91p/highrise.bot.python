@@ -23,7 +23,7 @@ def _parse_web_outfit_item(raw: dict) -> WebOutfitItem:
 
 @dataclass
 class GetPublicUserResponse(BaseResponse):
-    """Response for `GET /users/{user_id}`."""
+    """Response for `GET /users/{user_id/username}`."""
     user: PublicUser | None = None
 
     def _build(self, data: dict) -> None:
@@ -137,6 +137,8 @@ class GetPublicPostResponse(BaseResponse):
 
     def _build(self, data: dict):
         raw_post = data.get('post', {})
+        raw_comments = raw_post.get("comments", [])
+
         self.post = PublicPost(
             post_id=raw_post.get("post_id"),
             author_id=raw_post.get("author_id"),
@@ -149,14 +151,16 @@ class GetPublicPostResponse(BaseResponse):
             body= self._parse_post_body(raw_post.get("body", {})),
             caption=raw_post.get("caption"),
             featured_user_ids=raw_post.get("featured_user_ids", []),
-            comments=raw_post.get("comments", [])
+            comments=[Comment(**comment) for comment in raw_comments]
         )
 
     @staticmethod
     def _parse_post_body(body: dict) -> PostBody:
         inventory_dict = body.get('inventory', {})
+        inventory_items = inventory_dict.get('items') or []
+
         post_inventory = PostInventory(
-            items=[PostItem(**item) for item in inventory_dict.get('items') or []]
+            items=[PostItem(**item) for item in inventory_items]
         )
 
         return PostBody(
@@ -206,7 +210,7 @@ class GetPublicPostsResponse(BaseResponse):
 
 @dataclass
 class SearchItemsResponse(BaseResponse):
-    """Response for GET `/items/search`."""
+    """Response for GET `/items/search?` (list endpoint)."""
     items: list[ItemBasic] = field(default_factory=list)
     next_page_fn: Callable[[], Coroutine[Any, Any, "SearchItemsResponse"]] | None = None
 
@@ -344,7 +348,7 @@ class GetPublicItemResponse(BaseResponse):
 
 @dataclass
 class GetPublicItemsResponse(BaseResponse):
-    """Response for `GET /items (list endpoint)`."""
+    """Response for `GET /items? (list endpoint)`."""
     items: list[ItemBasic] = field(default_factory=list)
     total: int = 0
     first_id: str = ""
