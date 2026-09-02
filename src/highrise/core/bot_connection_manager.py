@@ -6,7 +6,7 @@ from websockets import State
 from typing import Any, TYPE_CHECKING
 
 from ..models.highrise.highrise_models import Credentials
-from ..constants import HIGHRISE_WS_URI
+from ..constants import HIGHRISE_WS_URI, SERVER_ERRORS
 
 from .bot_event_handlers import EVENT_HANDLERS
 
@@ -186,6 +186,11 @@ class ConnectionManager:
         """Handle the raw frame coming from highrise websocket server"""
         try:
             data = json.loads(raw_frame)
+            data_message = data.get('message')
+            
+            if data_message in SERVER_ERRORS:
+                self._handle_server_errors(data)
+                return
 
             if self.bot._context.requester.handle_incoming_response(data):
                 return
@@ -224,3 +229,9 @@ class ConnectionManager:
         
         self.bot._context.cache.clear_all()
         self.bot.cached_users.clear()
+
+    def _handle_server_errors(self, error_data: dict) -> None:
+        error_message = error_data.get("message")
+        
+        self._is_running = False
+        self.bot.logger.critical(error_message)
