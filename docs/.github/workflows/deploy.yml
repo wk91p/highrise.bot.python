@@ -1,0 +1,58 @@
+name: Deploy mdBook to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache mdBook
+        id: cache-mdbook
+        uses: actions/cache@v4
+        with:
+          path: bin/mdbook
+          key: mdbook-v0.5.4-x86_64-linux
+
+      - name: Install mdBook
+        if: steps.cache-mdbook.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p bin
+          curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.5.4/mdbook-v0.5.4-x86_64-unknown-linux-gnu.tar.gz | tar -xz -C bin
+
+      - name: Add to PATH
+        run: echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+      - name: Build mdBook
+        run: mdbook build docs
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs/book
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
