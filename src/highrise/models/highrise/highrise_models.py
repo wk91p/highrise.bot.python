@@ -109,7 +109,11 @@ class Message:
         if index is None:
             return rest
 
-        return rest[index] if index < len(rest) else None
+        try:
+            return rest[index]
+        except IndexError:
+            return None
+
 
     def mentions(self, index: int | None = None) -> list[str] | str | None:
         """Returns all mentioned usernames (words starting with '@',
@@ -122,7 +126,10 @@ class Message:
         if index is None:
             return all_mentions
 
-        return all_mentions[index] if index < len(all_mentions) else None
+        try:
+            return all_mentions[index]
+        except IndexError:
+            return None
 
 
 @dataclass
