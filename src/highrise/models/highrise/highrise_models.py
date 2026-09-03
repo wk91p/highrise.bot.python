@@ -191,7 +191,7 @@ class SessionMetadata:
             sdk_version=data.get("sdk_version"),
         )
 
-@dataclass(frozen=True)
+@dataclass
 class MessageEntry:
     """A single message entry, as returned by `get_messages` or nested
     inside a `Conversation` as its `last_message`."""
@@ -214,7 +214,7 @@ class ConversationEntry:
     name: str | None = None
     owner_id: str | None = None
 
-@dataclass(frozen=True)
+@dataclass
 class OutfitItem:
     """A single item in a user's outfit."""
     type: str
@@ -223,19 +223,19 @@ class OutfitItem:
     account_bound: bool
     active_palette: int
 
-@dataclass(frozen=True)
+@dataclass
 class RoomPermissions:
     """Room privilege flags to assign to a user."""
     moderator: bool | None = None
     designer: bool | None = None
 
-@dataclass(frozen=True)
+@dataclass
 class CurrencyItem:
     """A Highrise currency amount. Common types: `gold`, `bubbles`."""
-    type: str
+    type: CurrencyType
     amount: int
 
-@dataclass(frozen=True)
+@dataclass
 class Credentials:
     """Room/token pair used for the current session."""
     room_id: str
