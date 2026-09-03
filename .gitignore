@@ -1,4 +1,8 @@
+docs/book/
+bin/
+
+# Python
 dist/
-src/highrise.bot.egg-info/
 __pycache__/
-build/
+*.pyc
+*.egg-info/
