@@ -40,7 +40,7 @@ Your terminal prompt should now show `(venv)` at the start of the line. That mea
 ## Install the SDK
 
 ```bash
-pip install highrise.bot
+pip install "git+https://github.com/wk91p/highrise.bot.python.git"
 ```
 
 That's it. You're ready to write your first bot, move to the next page to continue!.
