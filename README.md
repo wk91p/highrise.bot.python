@@ -13,6 +13,11 @@ Unofficial Python SDK for [Highrise Virtual Reality](https://highrise.game)
 pip install "git+https://github.com/wk91p/highrise.bot.python.git"
 ```
 
+## Documentation 
+You can check the documentation by visiting the repo website here
+
+[View Documentation](https://wk91p.github.io/highrise.bot.python)
+
 ## Quick start
 
 ```python
