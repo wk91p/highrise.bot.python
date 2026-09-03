@@ -1,17 +1,14 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 from collections.abc import Callable
 
 from ...models.webapi.webapi_models import SortOptions, ItemCategory, Rarity
 
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
+from ...tools.validator import Validator
 
 from ...models.webapi.responses import SearchItemsResponse, GetPublicItemResponse, GetPublicItemsResponse
 
 class ItemsWebMixin:
     """Public web API methods for item search."""
-
-    _context: "BotContext"
 
     async def _send_request(
         self, endpoint: str, response_cls: Any, validate_fn: Callable, params: dict | None = None
@@ -34,13 +31,13 @@ class ItemsWebMixin:
         """
 
         def validate():
-            self._context.validator.required(query, 'query')
-            self._context.validator.string(query, 'query')
+            Validator.required(query, 'query')
+            Validator.string(query, 'query')
             if limit is not None:
-                self._context.validator.range(limit, 1, 100, "limit")
+                Validator.range(limit, 1, 100, "limit")
             if skip is not None:
-                self._context.validator.integer(skip, 'skip')
-                self._context.validator.range(skip, 0, 100_000, "skip")
+                Validator.integer(skip, 'skip')
+                Validator.range(skip, 0, 100_000, "skip")
 
         params = {
             "limit": limit,
@@ -64,8 +61,8 @@ class ItemsWebMixin:
         """Fetch a single item given its `item_id`."""
 
         def validate():
-            self._context.validator.required(item_id, "item_id")
-            self._context.validator.string(item_id, "item_id")
+            Validator.required(item_id, "item_id")
+            Validator.string(item_id, "item_id")
 
         return await self._send_request(f"/items/{item_id}", GetPublicItemResponse, validate)
 
@@ -83,27 +80,27 @@ class ItemsWebMixin:
             - `rarity`: The rarities of items to filter for, comma separated for multiple rarities (eg: `"rare,epic,legendary,none"`) or just one `"rare"`."""
 
         def validate():
-            self._context.validator.string(sort_order, "sort_order")
-            self._context.validator.one_of(sort_order, ("desc", "asc"), "sort_order")
+            Validator.string(sort_order, "sort_order")
+            Validator.one_of(sort_order, ("desc", "asc"), "sort_order")
 
-            self._context.validator.integer(limit, "limit")
-            self._context.validator.range(limit, 1, 100, "limit")
+            Validator.integer(limit, "limit")
+            Validator.range(limit, 1, 100, "limit")
 
             if starts_after is not None:
-                self._context.validator.string(starts_after, "starts_after")
+                Validator.string(starts_after, "starts_after")
 
             if ends_before is not None:
-                self._context.validator.string(ends_before, "ends_before")
+                Validator.string(ends_before, "ends_before")
 
             if rarity is not None:
-                self._context.validator.string(rarity, "rarity")
+                Validator.string(rarity, "rarity")
                 valid_rarities = {r.value for r in Rarity}
 
                 for r in rarity.split(","):
-                    self._context.validator.one_of(r.strip(), valid_rarities, "rarity")
+                    Validator.one_of(r.strip(), valid_rarities, "rarity")
 
             if item_name is not None:
-                self._context.validator.string(item_name, "item_name")
+                Validator.string(item_name, "item_name")
 
         params = {
             "starts_after": starts_after,

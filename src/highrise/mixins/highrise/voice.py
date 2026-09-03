@@ -1,17 +1,13 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 from collections.abc import Callable
 
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
+from ...tools.validator import Validator
 
 from ...models.websocket.responses import AcknowledgementResponse, CheckVoiceChatResponse
 from ...models.websocket.requests import CheckVoiceChatRequest, InviteSpeakerRequest, RemoveSpeakerRequest
 
-
 class VoiceMixin:
     """Voice chat-related methods: check status, invite/remove speakers."""
-
-    _context: "BotContext"
 
     async def _send_request(self, response_cls: Any, build_payload: Callable[[], dict]) -> Any: ...
 
@@ -28,8 +24,8 @@ class VoiceMixin:
         """Adds a user to voice chat."""
 
         def build() -> dict:
-            self._context.validator.required(user_id, "user_id")
-            self._context.validator.string(user_id, "user_id")
+            Validator.required(user_id, "user_id")
+            Validator.string(user_id, "user_id")
 
             request = InviteSpeakerRequest(user_id=user_id)
             return request.to_dict()
@@ -40,8 +36,8 @@ class VoiceMixin:
         """Removes a user from voice chat."""
 
         def build() -> dict:
-            self._context.validator.required(user_id, "user_id")
-            self._context.validator.string(user_id, "user_id")
+            Validator.required(user_id, "user_id")
+            Validator.string(user_id, "user_id")
 
             request = RemoveSpeakerRequest(user_id=user_id)
             return request.to_dict()

@@ -11,7 +11,6 @@ from .configs import BotConfig
 from .cache.room_users import RoomUsersCache
 
 from .tools.logger import setup_logger
-from .tools.validator import Validator
 from .tools.awaiter import Awaiter
 from .tools.roles import Roles
 
@@ -42,8 +41,7 @@ class BaseBot(BotHooks):
         )
 
         requester = WSRequester(lambda: self._connection.ws_client, self.logger)
-        validator = Validator()
-        self._context = BotContext(requester, validator)
+        self._context = BotContext(requester)
 
         self.highrise = HighriseApi(self._context)
         self.cached_users = RoomUsersCache()

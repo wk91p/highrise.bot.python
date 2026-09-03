@@ -1,8 +1,7 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 from collections.abc import Callable
 
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
+from ...tools.validator import Validator
 
 from ...models.websocket.responses import AcknowledgementResponse
 from ...models.websocket.requests import ChannelRequest
@@ -10,8 +9,6 @@ from ...models.websocket.requests import ChannelRequest
 
 class ChannelMixin:
     """Hidden channel methods: bot-to-bot or bot-to-client communication."""
-
-    _context: "BotContext"
 
     async def _send_request(self, response_cls: Any, build_payload: Callable[[], dict]) -> Any: ...
 
@@ -23,8 +20,8 @@ class ChannelMixin:
         """Sends a hidden channel message to the room for bot-to-bot or bot-to-client communication."""
 
         def build() -> dict:
-            self._context.validator.required(message, "message")
-            self._context.validator.string(message, "message")
+            Validator.required(message, "message")
+            Validator.string(message, "message")
 
             tag_list = tags if tags is not None else []
 

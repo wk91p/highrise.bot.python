@@ -1,15 +1,12 @@
 from ...models.webapi.responses import GetPublicRoomResponse, GetPublicRoomsResponse
-from typing import Any, TYPE_CHECKING
+from typing import Any
 from collections.abc import Callable
 from ...models.webapi.webapi_models import SortOptions
 
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
+from ...tools.validator import Validator
 
 class RoomsWebMixin:
     """Public web API methods for room lookups."""
-
-    _context: "BotContext"
 
     async def _send_request(
         self, endpoint: str, response_cls: Any, validate_fn: Callable, params: dict | None = None
@@ -19,8 +16,8 @@ class RoomsWebMixin:
         """Fetch a single room given its room_id."""
 
         def validate():
-            self._context.validator.required(room_id, "room_id")
-            self._context.validator.string(room_id, "room_id")
+            Validator.required(room_id, "room_id")
+            Validator.string(room_id, "room_id")
 
         return await self._send_request(f"/rooms/{room_id}", GetPublicRoomResponse, validate)
 
@@ -36,13 +33,13 @@ class RoomsWebMixin:
         """Fetch a list of rooms, filtered, ordered, and paginated."""
 
         def validate():
-            if starts_after: self._context.validator.string(starts_after, 'starts_after')
-            if ends_before: self._context.validator.string(ends_before, 'ends_before')
-            if room_name: self._context.validator.string(room_name, 'room_name')
-            if owner_id: self._context.validator.string(owner_id, 'owner_id')
+            if starts_after: Validator.string(starts_after, 'starts_after')
+            if ends_before: Validator.string(ends_before, 'ends_before')
+            if room_name: Validator.string(room_name, 'room_name')
+            if owner_id: Validator.string(owner_id, 'owner_id')
             
-            self._context.validator.one_of(sort_order, ("desc", "asc"), "sort_order")
-            self._context.validator.range(limit, 1, 100, "limit")
+            Validator.one_of(sort_order, ("desc", "asc"), "sort_order")
+            Validator.range(limit, 1, 100, "limit")
 
         params = {
             "starts_after": starts_after,

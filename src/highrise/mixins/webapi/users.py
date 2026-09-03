@@ -1,14 +1,11 @@
 from ...models.webapi.responses import GetPublicUserResponse
-from typing import Any, TYPE_CHECKING
+from typing import Any
 from collections.abc import Callable
 
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
+from ...tools.validator import Validator
 
 class UsersWebMixin:
     """Public web API methods for user lookups."""
-
-    _context : "BotContext"
 
     async def _send_request(
         self, endpoint: str, response_cls: Any, validate_fn: Callable, params: dict | None = None
@@ -18,7 +15,7 @@ class UsersWebMixin:
         """Fetches a user's public profile by id or username."""
         
         def validate():
-            self._context.validator.required(identifier, "identifier")
-            self._context.validator.string(identifier, "identifier")
+            Validator.required(identifier, "identifier")
+            Validator.string(identifier, "identifier")
 
         return await self._send_request(f"/users/{identifier}", GetPublicUserResponse, validate)

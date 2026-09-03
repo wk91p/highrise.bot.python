@@ -1,17 +1,13 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 from collections.abc import Callable
 
 from ...models.webapi.webapi_models import SortOptions
-
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
+from ...tools.validator import Validator
 
 from ...models.webapi.responses import GetPublicGrabResponse, GetPublicGrabsResponse
 
 class GrabsWebMixin:
     """Public web API methods for grab lookups."""
-
-    _context: "BotContext"
 
     async def _send_request(
         self, endpoint: str, response_cls: Any, validate_fn: Callable, params: dict | None = None
@@ -21,8 +17,8 @@ class GrabsWebMixin:
         """Fetch a single grab given its grab_id."""
 
         def validate():
-            self._context.validator.required(grab_id, "grab_id")
-            self._context.validator.string(grab_id, "grab_id")
+            Validator.required(grab_id, "grab_id")
+            Validator.string(grab_id, "grab_id")
 
         return await self._send_request(f"/grabs/{grab_id}", GetPublicGrabResponse, validate)
 
@@ -37,18 +33,18 @@ class GrabsWebMixin:
         """Fetch a list of grabs, can be filtered, ordered, and paginated."""
 
         def validate():
-            self._context.validator.string(sort_order, "sort_order")
-            self._context.validator.one_of(sort_order, ("desc", "asc"), "sort_order")
+            Validator.string(sort_order, "sort_order")
+            Validator.one_of(sort_order, ("desc", "asc"), "sort_order")
 
-            self._context.validator.integer(limit, "limit")
-            self._context.validator.range(limit, 1, 100, "limit")
+            Validator.integer(limit, "limit")
+            Validator.range(limit, 1, 100, "limit")
 
             if starts_after is not None:
-                self._context.validator.string(starts_after, "starts_after")
+                Validator.string(starts_after, "starts_after")
             if ends_before is not None:
-                self._context.validator.string(ends_before, "ends_before")
+                Validator.string(ends_before, "ends_before")
             if title is not None:
-                self._context.validator.string(title, "title")
+                Validator.string(title, "title")
 
         params = {
             "starts_after": starts_after,

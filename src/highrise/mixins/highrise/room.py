@@ -1,18 +1,14 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 from collections.abc import Callable
 
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
+from ...tools.validator import Validator
 
 from ...models.websocket.responses import GetRoomUsersResponse, GetRoomPrivilegeResponse, AcknowledgementResponse
 from ...models.websocket.requests import GetRoomUsersRequest, GetRoomPrivilegeRequest, ChangeRoomPrivilegeRequest
 from ...models.websocket.highrise_models import RoomPermissions
 
-
 class RoomMixin:
     """Room-related methods: fetch users currently in the room."""
-
-    _context: "BotContext"
 
     async def _send_request(self, response_cls: Any, build_payload: Callable[[], dict]) -> Any: ...
 
@@ -29,8 +25,8 @@ class RoomMixin:
         """Fetches the room privilege for the given user."""
 
         def build() -> dict:
-            self._context.validator.required(user_id, "user_id")
-            self._context.validator.string(user_id, "user_id")
+            Validator.required(user_id, "user_id")
+            Validator.string(user_id, "user_id")
 
             request = GetRoomPrivilegeRequest(user_id=user_id)
             return request.to_dict()
@@ -59,14 +55,14 @@ class RoomMixin:
         """Change the room privilege for the given user."""
 
         def build() -> dict:
-            self._context.validator.required(user_id, "user_id")
-            self._context.validator.string(user_id, "user_id")
-            self._context.validator.required(permissions, "permissions")
+            Validator.required(user_id, "user_id")
+            Validator.string(user_id, "user_id")
+            Validator.required(permissions, "permissions")
 
             if permissions.moderator is not None:
-                self._context.validator.boolean(permissions.moderator, "permissions.moderator")
+                Validator.boolean(permissions.moderator, "permissions.moderator")
             if permissions.designer is not None:
-                self._context.validator.boolean(permissions.designer, "permissions.designer")
+                Validator.boolean(permissions.designer, "permissions.designer")
 
             request = ChangeRoomPrivilegeRequest(user_id=user_id, permissions=permissions)
             return request.to_dict()

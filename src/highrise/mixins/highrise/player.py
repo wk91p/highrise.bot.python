@@ -1,9 +1,6 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 from collections.abc import Callable
 import asyncio
-
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
 
 from ...models.websocket.responses import AcknowledgementResponse, TipUserResponse, GetUserOutfitResponse
 from ...models.websocket.requests import (
@@ -17,26 +14,24 @@ from ...models.websocket.requests import (
     MoveUserToRoomRequest
 )
 
-from ...models.websocket.highrise_models import *
-
 from ...tools.utils import Utils
+from ...tools.validator import Validator
+
+from ...models.websocket.highrise_models import *
 
 TIP_SPLIT_DELAY = 0.4
 
 class PlayerMixin:
     """Player-related methods: `emote`, `moderation`, `teleport`, other actions."""
-
-    _context: "BotContext"
-
     async def _send_request(self, response_cls: Any, build_payload: Callable[[], dict]) -> Any: ...
 
     async def send_emote(self, emote_id: str, target_user_id: str | None = None) -> AcknowledgementResponse:
         """Perform an emote directed toward a specific player, if no `target_user_id` provided it will be performed on the bot."""
 
         def build() -> dict:
-            self._context.validator.required(emote_id, "emote_id")
-            self._context.validator.string(emote_id, "emote_id")
-            self._context.validator.string(target_user_id, "target_user_id")
+            Validator.required(emote_id, "emote_id")
+            Validator.string(emote_id, "emote_id")
+            Validator.string(target_user_id, "target_user_id")
 
             request = EmoteRequest(emote_id=emote_id, target_user_id=target_user_id)
             return request.to_dict()
@@ -47,7 +42,7 @@ class PlayerMixin:
         """Moves the bot to the given floor position or anchor position."""
 
         def build() -> dict:
-            self._context.validator.required(destination, "destination")
+            Validator.required(destination, "destination")
 
             if isinstance(destination, AnchorPosition):
                 request = AnchorHitRequest(anchor=destination)
@@ -62,9 +57,9 @@ class PlayerMixin:
         """Teleports a user to the given floor position."""
 
         def build() -> dict:
-            self._context.validator.required(user_id, "user_id")
-            self._context.validator.string(user_id, "user_id")
-            self._context.validator.required(destination, "destination")
+            Validator.required(user_id, "user_id")
+            Validator.string(user_id, "user_id")
+            Validator.required(destination, "destination")
 
             request = TeleportRequest(user_id=user_id, destination=destination)
             return request.to_dict()
@@ -80,16 +75,16 @@ class PlayerMixin:
         """Moderate a user in the room: kick, ban, unban, or mute."""
 
         def build() -> dict:
-            self._context.validator.required(user_id, "user_id")
-            self._context.validator.string(user_id, "user_id")
-            self._context.validator.required(action, "action")
-            self._context.validator.one_of(action, ("kick", "ban", "unban", "mute"), "action")
+            Validator.required(user_id, "user_id")
+            Validator.string(user_id, "user_id")
+            Validator.required(action, "action")
+            Validator.one_of(action, ("kick", "ban", "unban", "mute"), "action")
 
             if action_length is not None:
                 year_in_sec = 60 * 365 * 24 * 3600
                 min_in_sec = 60
 
-                self._context.validator.range(action_length, min_in_sec, year_in_sec, "action_length")
+                Validator.range(action_length, min_in_sec, year_in_sec, "action_length")
 
             request = ModerateRoomRequest(
                 user_id=user_id,
@@ -124,10 +119,10 @@ class PlayerMixin:
         """Tips a user with the given gold bar amount."""
 
         def build() -> dict:
-            self._context.validator.required(user_id, "user_id")
-            self._context.validator.string(user_id, "user_id")
-            self._context.validator.required(tip, "tip")
-            self._context.validator.one_of(tip, TIP_VALUES.values(), "tip")
+            Validator.required(user_id, "user_id")
+            Validator.string(user_id, "user_id")
+            Validator.required(tip, "tip")
+            Validator.one_of(tip, TIP_VALUES.values(), "tip")
 
             request = TipUserRequest(user_id=user_id, gold_bar=tip)
             return request.to_dict()
@@ -157,8 +152,8 @@ class PlayerMixin:
         """Fetches the outfit for a user."""
 
         def build() -> dict:
-            self._context.validator.required(user_id, "user_id")
-            self._context.validator.string(user_id, "user_id")
+            Validator.required(user_id, "user_id")
+            Validator.string(user_id, "user_id")
 
             request = GetUserOutfitRequest(user_id=user_id)
             return request.to_dict()
@@ -173,10 +168,10 @@ class PlayerMixin:
         """
 
         def build() -> dict:
-            self._context.validator.required(user_id, "user_id")
-            self._context.validator.string(user_id, "user_id")
-            self._context.validator.required(room_id, "room_id")
-            self._context.validator.string(room_id, "room_id")
+            Validator.required(user_id, "user_id")
+            Validator.string(user_id, "user_id")
+            Validator.required(room_id, "room_id")
+            Validator.string(room_id, "room_id")
 
             request = MoveUserToRoomRequest(user_id=user_id, room_id=room_id)
             return request.to_dict()

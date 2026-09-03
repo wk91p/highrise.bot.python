@@ -1,17 +1,13 @@
 from ...models.webapi.responses import GetPublicPostResponse, GetPublicPostsResponse
-from typing import Any, TYPE_CHECKING
+from typing import Any
 from collections.abc import Callable
 
 from ...models.webapi.webapi_models import SortOptions
 
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
+from ...tools.validator import Validator
 
 class PostsWebMixin:
     """Public web API methods for post lookups."""
-
-    _context: "BotContext"
-
     async def _send_request(
         self, endpoint: str, response_cls: Any, validate_fn: Callable, params: dict | None = None
     ) -> Any: ...
@@ -20,8 +16,8 @@ class PostsWebMixin:
         """Fetch a single post given its post_id."""
 
         def validate(): 
-            self._context.validator.required(post_id, 'post_id')
-            self._context.validator.string(post_id, 'post_id')
+            Validator.required(post_id, 'post_id')
+            Validator.string(post_id, 'post_id')
 
         return await self._send_request(f"/posts/{post_id}", GetPublicPostResponse, validate)
 
@@ -36,8 +32,8 @@ class PostsWebMixin:
         """Fetch a list of posts, filtered, ordered, and paginated."""
 
         def validate():
-            self._context.validator.one_of(sort_order, ("desc", "asc"), "sort_order")
-            self._context.validator.range(limit, 1, 100, "limit")
+            Validator.one_of(sort_order, ("desc", "asc"), "sort_order")
+            Validator.range(limit, 1, 100, "limit")
 
         params = {
             "starts_after": starts_after,

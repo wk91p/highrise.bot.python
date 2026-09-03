@@ -1,10 +1,9 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 from collections.abc import Callable
 import asyncio
 import textwrap
 
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
+from ...tools.validator import Validator
 
 from ...models.websocket.responses import AcknowledgementResponse
 from ...models.websocket.requests import ChatRequest
@@ -15,8 +14,6 @@ SPLIT_DELAY = 0.4
 
 class ChatMixin:
     """Chat-related methods: room chat, whispers."""
-
-    _context: "BotContext"
 
     async def _send_request(self, response_cls: Any, build_payload: Callable[[], dict]) -> Any: ...
 
@@ -42,8 +39,8 @@ class ChatMixin:
         are automatically split into multiple chunks, sent with a `400ms`
         delay between each. Returns a single response normally, or a list
         of responses if the message was split."""
-        self._context.validator.required(message, "message")
-        self._context.validator.string(message, "message")
+        Validator.required(message, "message")
+        Validator.string(message, "message")
 
         if len(message) <= MAX_MESSAGE_LENGTH:
             def build() -> dict:
@@ -60,10 +57,10 @@ class ChatMixin:
         characters are automatically split into multiple chunks, sent with
         a `400ms` delay between each. Returns a single response normally, or
         a list of responses if the message was split."""
-        self._context.validator.required(user_id, "user_id")
-        self._context.validator.string(user_id, "user_id")
-        self._context.validator.required(message, "message")
-        self._context.validator.string(message, "message")
+        Validator.required(user_id, "user_id")
+        Validator.string(user_id, "user_id")
+        Validator.required(message, "message")
+        Validator.string(message, "message")
 
         if len(message) <= MAX_MESSAGE_LENGTH:
             def build() -> dict:

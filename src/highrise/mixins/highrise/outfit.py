@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING, Any
 from collections.abc import Callable
 
+from ...tools.validator import Validator
+
 if TYPE_CHECKING:
     from ...base_bot import BotContext
 
@@ -51,10 +53,10 @@ class OutfitMixin:
 
 
         def build() -> dict:
-            self._context.validator.required(final_outfit, "outfit")
+            Validator.required(final_outfit, "outfit")
 
             for item in final_outfit:
-                self._context.validator.instance_of(item, OutfitItem, "outfit items")
+                Validator.instance_of(item, OutfitItem, "outfit items")
 
             request = SetOutfitRequest(outfit=final_outfit)
             return request.to_dict()
@@ -72,8 +74,8 @@ class OutfitMixin:
     async def change_item_color(self, item_id: str, palette_index: int) -> AcknowledgementResponse:
         """Changes the active palette of an item currently in the bot's outfit."""
 
-        self._context.validator.required(item_id, "item_id").string(item_id, "item_id")
-        self._context.validator.required(palette_index, "palette_index").integer(palette_index, "palette_index")
+        Validator.required(item_id, "item_id").string(item_id, "item_id")
+        Validator.required(palette_index, "palette_index").integer(palette_index, "palette_index")
 
         current = await self.get_my_outfit()
         if not current.ok:
@@ -103,7 +105,7 @@ class OutfitMixin:
     async def add_outfit_item(self, item: OutfitItem) -> AcknowledgementResponse:
         """Adds a new item to the bot's outfit."""
 
-        self._context.validator.required(item, "item").instance_of(item, OutfitItem, 'item')
+        Validator.required(item, "item").instance_of(item, OutfitItem, 'item')
 
         current = await self.get_my_outfit()
         if not current.ok:
@@ -120,7 +122,7 @@ class OutfitMixin:
     async def remove_outfit_item(self, item_id: str) -> AcknowledgementResponse:
         """Removes an item from the bot's outfit."""
 
-        self._context.validator.required(item_id, "item_id").string(item_id, 'item_id')
+        Validator.required(item_id, "item_id").string(item_id, 'item_id')
 
         current = await self.get_my_outfit()
         if not current.ok:

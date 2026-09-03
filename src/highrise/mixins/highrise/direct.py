@@ -1,10 +1,9 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 from collections.abc import Callable
 import asyncio
 import textwrap
 
-if TYPE_CHECKING:
-    from ...base_bot import BotContext
+from ...tools.validator import Validator
 
 from ...models.websocket.responses import AcknowledgementResponse, GetMessagesResponse, GetConversationsResponse
 from ...models.websocket.requests import SendMessageRequest, LeaveConversationRequest, GetMessagesRequest, GetConversationsRequest
@@ -14,8 +13,6 @@ SPLIT_DELAY = 0.4
 
 class DirectMixin:
     """Direct message-related methods: send/bulk send messages, send room/world invites, get messages/conversations."""
-
-    _context: "BotContext"
 
     async def _send_request(self, response_cls: Any, build_payload: Callable[[], dict]) -> Any: ...
 
@@ -28,16 +25,16 @@ class DirectMixin:
         Messages over `2000` characters are automatically split into multiple
         chunks, sent with a `400ms` delay between each. Returns a single
         response normally, or a list of responses if the message was split."""
-        self._context.validator.required(recipient, "recipient")
-        self._context.validator.required(content, "content")
-        self._context.validator.string(content, "content")
+        Validator.required(recipient, "recipient")
+        Validator.required(content, "content")
+        Validator.string(content, "content")
 
         is_bulk = isinstance(recipient, list)
 
         if is_bulk:
-            self._context.validator.max_items(recipient, 100, "recipient")
+            Validator.max_items(recipient, 100, "recipient")
         else:
-            self._context.validator.string(recipient, "recipient")
+            Validator.string(recipient, "recipient")
 
         def build_request(chunk: str) -> SendMessageRequest:
             if is_bulk:
@@ -73,17 +70,17 @@ class DirectMixin:
         """Sends a room invitation to a `conversation_id`, or to multiple `userIds` at once (bulk, max 100)."""
 
         def build() -> dict:
-            self._context.validator.required(recipient, "recipient")
-            self._context.validator.required(room_id, "room_id")
-            self._context.validator.string(room_id, "room_id")
+            Validator.required(recipient, "recipient")
+            Validator.required(room_id, "room_id")
+            Validator.string(room_id, "room_id")
 
             is_bulk = isinstance(recipient, list)
  
             if is_bulk:
-                self._context.validator.max_items(recipient, 100, "recipient")
+                Validator.max_items(recipient, 100, "recipient")
                 request = SendMessageRequest(user_ids=recipient, type="invite", room_id=room_id, is_bulk=True)
             else:
-                self._context.validator.string(recipient, "recipient")
+                Validator.string(recipient, "recipient")
                 request = SendMessageRequest(conversation_id=recipient, type="invite", room_id=room_id)
 
             return request.to_dict()
@@ -98,17 +95,17 @@ class DirectMixin:
         """Sends a world invitation to a `conversation_id`, or to multiple `userIds` at once (bulk, max 100)."""
 
         def build() -> dict:
-            self._context.validator.required(recipient, "recipient")
-            self._context.validator.required(world_id, "world_id")
-            self._context.validator.string(world_id, "world_id")
+            Validator.required(recipient, "recipient")
+            Validator.required(world_id, "world_id")
+            Validator.string(world_id, "world_id")
 
             is_bulk = isinstance(recipient, list)
 
             if is_bulk:
-                self._context.validator.max_items(recipient, 100, "recipient")
+                Validator.max_items(recipient, 100, "recipient")
                 request = SendMessageRequest(user_ids=recipient, type="invite", world_id=world_id, is_bulk=True)
             else:
-                self._context.validator.string(recipient, "recipient")
+                Validator.string(recipient, "recipient")
                 request = SendMessageRequest(conversation_id=recipient, type="invite", world_id=world_id)
 
             return request.to_dict()
@@ -119,8 +116,8 @@ class DirectMixin:
         """Leaves a conversation."""
 
         def build() -> dict:
-            self._context.validator.required(conversation_id, "conversation_id")
-            self._context.validator.string(conversation_id, "conversation_id")
+            Validator.required(conversation_id, "conversation_id")
+            Validator.string(conversation_id, "conversation_id")
 
             request = LeaveConversationRequest(conversation_id=conversation_id)
             return request.to_dict()
@@ -133,11 +130,11 @@ class DirectMixin:
         """Retrieves messages from a conversation. Supports `async for` pagination."""
 
         def build() -> dict:
-            self._context.validator.required(conversation_id, "conversation_id")
-            self._context.validator.string(conversation_id, "conversation_id")
+            Validator.required(conversation_id, "conversation_id")
+            Validator.string(conversation_id, "conversation_id")
 
             if last_message_id is not None:
-                self._context.validator.string(last_message_id, "last_message_id")
+                Validator.string(last_message_id, "last_message_id")
 
             request = GetMessagesRequest(conversation_id=conversation_id, last_message_id=last_message_id)
             return request.to_dict()
@@ -156,10 +153,10 @@ class DirectMixin:
         """Retrieves the bot's conversations. Supports `async for` pagination."""
 
         def build() -> dict:
-            self._context.validator.boolean(not_joined, "not_joined")
+            Validator.boolean(not_joined, "not_joined")
 
             if last_id is not None:
-                self._context.validator.string(last_id, "last_id")
+                Validator.string(last_id, "last_id")
 
             request = GetConversationsRequest(not_joined=not_joined, last_id=last_id)
             return request.to_dict()
