@@ -185,12 +185,7 @@ class GetRoomUsersResponse(BaseResponse):
 
 @dataclass
 class CheckVoiceChatResponse(BaseResponse):
-    """The status of voice chat in the room.
-
-    - seconds_left: seconds left until the voice chat ends.
-    - auto_speakers: users with automatic voice privileges (moderators, owner).
-    - users: users currently holding voice chat privileges, keyed by user id.
-    """
+    """The status of voice chat in the room."""
     seconds_left: int = 0
     auto_speakers: set[str] = field(default_factory=set)
     users: dict[str, VoiceStatus] = field(default_factory=dict)
