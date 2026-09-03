@@ -4,8 +4,8 @@ from collections.abc import Callable
 if TYPE_CHECKING:
     from ...base_bot import BotContext
 
-from ...models.highrise.responses import AcknowledgementResponse, CheckVoiceChatResponse
-from ...models.highrise.requests import CheckVoiceChatRequest, InviteSpeakerRequest, RemoveSpeakerRequest
+from ...models.websocket.responses import AcknowledgementResponse, CheckVoiceChatResponse
+from ...models.websocket.requests import CheckVoiceChatRequest, InviteSpeakerRequest, RemoveSpeakerRequest
 
 
 class VoiceMixin:

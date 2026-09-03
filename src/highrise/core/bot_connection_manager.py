@@ -5,7 +5,7 @@ import websockets
 from websockets import State
 from typing import Any, TYPE_CHECKING
 
-from ..models.highrise.highrise_models import Credentials
+from ..models.websocket.highrise_models import Credentials
 from ..constants import HIGHRISE_WS_URI, SERVER_ERRORS
 
 from .bot_event_handlers import EVENT_HANDLERS

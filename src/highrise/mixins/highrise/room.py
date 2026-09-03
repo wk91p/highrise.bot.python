@@ -4,9 +4,9 @@ from collections.abc import Callable
 if TYPE_CHECKING:
     from ...base_bot import BotContext
 
-from ...models.highrise.responses import GetRoomUsersResponse, GetRoomPrivilegeResponse, AcknowledgementResponse
-from ...models.highrise.requests import GetRoomUsersRequest, GetRoomPrivilegeRequest, ChangeRoomPrivilegeRequest
-from ...models.highrise.highrise_models import RoomPermissions
+from ...models.websocket.responses import GetRoomUsersResponse, GetRoomPrivilegeResponse, AcknowledgementResponse
+from ...models.websocket.requests import GetRoomUsersRequest, GetRoomPrivilegeRequest, ChangeRoomPrivilegeRequest
+from ...models.websocket.highrise_models import RoomPermissions
 
 
 class RoomMixin:

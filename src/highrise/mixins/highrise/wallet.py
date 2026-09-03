@@ -4,8 +4,8 @@ from collections.abc import Callable
 if TYPE_CHECKING:
     from ...base_bot import BotContext
 
-from ...models.highrise.responses import GetWalletResponse
-from ...models.highrise.requests import GetWalletRequest
+from ...models.websocket.responses import GetWalletResponse
+from ...models.websocket.requests import GetWalletRequest
 
 class WalletMixin:
     """Wallet-related methods: fetch the bot's currency balances."""

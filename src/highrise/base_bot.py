@@ -6,9 +6,9 @@ from websockets import State
 from .highrise_api import HighriseApi
 from .constants import EVENT_HOOK_MAP
 from .webapi import WebApi
+from .configs import BotConfig
 
 from .cache.room_users import RoomUsersCache
-from .configs import BotConfig
 
 from .tools.logger import setup_logger
 from .tools.validator import Validator
@@ -21,7 +21,7 @@ from .core.bot_hooks import BotHooks
 from .core.bot_connection_manager import ConnectionManager
 from .core.bot_task_manager import TaskManager
 
-from .models.highrise.highrise_models import *
+from .models.websocket.highrise_models import *
 
 class BaseBot(BotHooks):
     """A base class for Highrise bots.

@@ -4,8 +4,8 @@ from collections.abc import Callable
 if TYPE_CHECKING:
     from ...base_bot import BotContext
 
-from ...models.highrise.responses import AcknowledgementResponse
-from ...models.highrise.requests import ChannelRequest
+from ...models.websocket.responses import AcknowledgementResponse
+from ...models.websocket.requests import ChannelRequest
 
 
 class ChannelMixin:

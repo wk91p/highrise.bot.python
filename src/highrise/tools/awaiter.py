@@ -2,7 +2,7 @@ import asyncio
 from collections.abc import Callable
 from typing import Any, TypeVar
 
-from ..models.highrise.highrise_models import (
+from ..models.websocket.highrise_models import (
     AnchorPosition,
     Conversation,
     Item,

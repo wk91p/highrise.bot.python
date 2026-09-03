@@ -2,8 +2,20 @@ from dataclasses import dataclass, field
 from typing import TypeVar, Generic, Any
 from collections.abc import Coroutine, Callable
 
-from highrise.models.base_response import BaseResponse
-from highrise.models.highrise.highrise_models import *
+from ..base_response import BaseResponse
+from .highrise_models import (
+    MessageEntry,
+    ConversationEntry,
+    User,
+    Position,
+    AnchorPosition,
+    OutfitItem,
+    CurrencyItem,
+    VoiceStatus,
+    TipUserResult,
+    WalletCurrency,
+    ItemPurchaseResult
+)
 
 TPage = TypeVar("TPage", bound="BaseResponse")
 

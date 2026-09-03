@@ -1,4 +1,4 @@
-from .highrise.highrise_models import (
+from .websocket.highrise_models import (
     User,
     Position,
     AnchorPosition,
@@ -12,7 +12,7 @@ from .highrise.highrise_models import (
     RoomInfo
 )
 
-from .highrise.highrise_models import (
+from .websocket.highrise_models import (
     ConversationEntry,
     OutfitItem,
     RoomPermissions,

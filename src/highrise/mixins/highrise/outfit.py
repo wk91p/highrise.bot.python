@@ -4,10 +4,10 @@ from collections.abc import Callable
 if TYPE_CHECKING:
     from ...base_bot import BotContext
 
-from ...models.highrise.responses import GetUserOutfitResponse, AcknowledgementResponse
-from ...models.highrise.requests import GetUserOutfitRequest, SetOutfitRequest
+from ...models.websocket.responses import GetUserOutfitResponse, AcknowledgementResponse
+from ...models.websocket.requests import GetUserOutfitRequest, SetOutfitRequest
 
-from ...models.highrise.highrise_models import OutfitItem
+from ...models.websocket.highrise_models import OutfitItem
 from ...constants import DEFAULT_OUTFIT
 
 class OutfitMixin:

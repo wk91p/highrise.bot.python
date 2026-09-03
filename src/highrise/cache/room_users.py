@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from ..models.highrise.highrise_models import *
-from ..models.highrise.responses import GetRoomUsersResponse
+from ..models.websocket.highrise_models import *
+from ..models.websocket.responses import GetRoomUsersResponse
 
 @dataclass
 class RoomUsersCache:

@@ -1,5 +1,5 @@
 from typing import TypeVar, Generic
-from ..models.highrise.responses import (
+from ..models.websocket.responses import (
     GetUserOutfitResponse
 )
 

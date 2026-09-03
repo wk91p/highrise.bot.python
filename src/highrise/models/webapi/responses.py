@@ -3,7 +3,7 @@ from typing import Callable, Coroutine, Any
 from datetime import datetime
 from .webapi_models import *
 from ..base_response import BaseResponse
-from ..highrise.responses import ResponseIterator
+from ..websocket.responses import ResponseIterator
 from ...constants import HIGHRISE_CLOUDFLARE_URL
 
 def _parse_web_outfit_item(raw: dict) -> WebOutfitItem:

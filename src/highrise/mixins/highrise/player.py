@@ -5,8 +5,8 @@ import asyncio
 if TYPE_CHECKING:
     from ...base_bot import BotContext
 
-from ...models.highrise.responses import AcknowledgementResponse, TipUserResponse, GetUserOutfitResponse
-from ...models.highrise.requests import (
+from ...models.websocket.responses import AcknowledgementResponse, TipUserResponse, GetUserOutfitResponse
+from ...models.websocket.requests import (
     EmoteRequest, 
     AnchorHitRequest, 
     TeleportRequest,
@@ -17,7 +17,7 @@ from ...models.highrise.requests import (
     MoveUserToRoomRequest
 )
 
-from ...models.highrise.highrise_models import *
+from ...models.websocket.highrise_models import *
 
 from ...tools.utils import Utils
 

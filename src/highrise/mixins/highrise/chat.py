@@ -6,8 +6,8 @@ import textwrap
 if TYPE_CHECKING:
     from ...base_bot import BotContext
 
-from ...models.highrise.responses import AcknowledgementResponse
-from ...models.highrise.requests import ChatRequest
+from ...models.websocket.responses import AcknowledgementResponse
+from ...models.websocket.requests import ChatRequest
 
 MAX_MESSAGE_LENGTH = 256
 SPLIT_DELAY = 0.4

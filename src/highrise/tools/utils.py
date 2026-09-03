@@ -1,4 +1,4 @@
-from ..models.highrise.highrise_models import TipType, TIP_VALUES
+from ..models.websocket.highrise_models import TipType, TIP_VALUES
 
 class Utils:
     """Stateless helper functions used across the SDK."""

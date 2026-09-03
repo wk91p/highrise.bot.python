@@ -4,8 +4,8 @@ from collections.abc import Callable
 if TYPE_CHECKING:
     from ...base_bot import BotContext
 
-from ...models.highrise.responses import BuyItemResponse, GetInventoryResponse
-from ...models.highrise.requests import BuyItemRequest, GetInventoryRequest
+from ...models.websocket.responses import BuyItemResponse, GetInventoryResponse
+from ...models.websocket.requests import BuyItemRequest, GetInventoryRequest
 
 class InventoryMixin:
     """Inventory-related methods: buy items."""

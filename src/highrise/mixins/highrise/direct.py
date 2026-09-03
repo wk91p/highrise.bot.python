@@ -6,8 +6,8 @@ import textwrap
 if TYPE_CHECKING:
     from ...base_bot import BotContext
 
-from ...models.highrise.responses import AcknowledgementResponse, GetMessagesResponse, GetConversationsResponse
-from ...models.highrise.requests import SendMessageRequest, LeaveConversationRequest, GetMessagesRequest, GetConversationsRequest
+from ...models.websocket.responses import AcknowledgementResponse, GetMessagesResponse, GetConversationsResponse
+from ...models.websocket.requests import SendMessageRequest, LeaveConversationRequest, GetMessagesRequest, GetConversationsRequest
 
 DM_MAX_LENGTH = 2000
 SPLIT_DELAY = 0.4
