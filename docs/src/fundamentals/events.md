@@ -212,19 +212,6 @@ async def on_emote(self, user, emote_id, receiver):
     print(f"{user.username} used emote {emote_id}")
 ```
 
-### `on_reaction(user, reaction, receiver)`
-
-```python
-async def on_reaction(self, user: User, reaction: str, receiver: Receiver) -> None
-```
-
-Fires when a user performs a reaction on another user. `reaction` is a plain string.
-
-```python
-async def on_reaction(self, user, reaction, receiver):
-    print(f"{user.username} reacted with {reaction} on {receiver.username}")
-```
-
 ## Currency and moderation
 
 ### `on_tip(sender, receiver, tip)`
