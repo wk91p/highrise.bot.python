@@ -64,7 +64,7 @@ class TaskManager:
 
     async def _autosave_roles_loop(self) -> None:
         try:
-            while self.bot._connection.is_connected():
+            while self.bot._connection.is_connected:
                 await asyncio.sleep(self.bot.config.roles.autosave_interval)
                 self.bot.roles.save()
         except asyncio.CancelledError:

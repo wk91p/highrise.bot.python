@@ -189,7 +189,7 @@ class ConnectionManager:
             data_message = data.get('message')
             
             if data_message in SERVER_ERRORS:
-                self._handle_server_errors(data)
+                await self._handle_server_errors(data)
                 return
 
             if self.bot._context.requester.handle_incoming_response(data):
@@ -230,8 +230,8 @@ class ConnectionManager:
         self.bot._context.cache.clear_all()
         self.bot.cached_users.clear()
 
-    def _handle_server_errors(self, error_data: dict) -> None:
+    async def _handle_server_errors(self, error_data: dict) -> None:
         error_message = error_data.get("message")
         
-        self._is_running = False
         self.bot.logger.critical(error_message)
+        await self.logout()
