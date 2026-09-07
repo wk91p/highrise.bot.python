@@ -112,14 +112,23 @@ class ConnectionManager:
 
         self.bot.logger.info("Bot session ended.")
 
-    async def logout(self) -> None:
-        """Gracefully logs out and disables automatic reconnection."""
-        self.bot.logger.info("Logging out from Highrise Server...")
+    async def logout(self, hide_logs = False) -> None:
+        """Gracefully disconnects the bot and disables auto-reconnect.
+    
+        This stops the internal loop of `login()` and allows it to return. 
+        Use this for a clean, intentional shutdown rather than abruptly 
+        killing the process.
+
+        - `hide_logs`: default `False`, If `True`, suppresses the standard logout progress and success 
+            messages in the console logs.
+        """
+        if not hide_logs: self.bot.logger.info("Logging out from Highrise Server...")
+
         self._is_running = False
         self._auto_reconnect = False
 
         await self._cleanup()
-        self.bot.logger.info("Logged out successfully.")
+        if not hide_logs: self.bot.logger.info("Logged out successfully.")
 
     async def force_reconnect(self) -> None:
         if not self._is_running:
@@ -153,7 +162,6 @@ class ConnectionManager:
         url = f"{HIGHRISE_WS_URI}?events={self.bot._event_params}"
 
         self._ws = await websockets.connect(url, additional_headers=headers, compression=None)
-        self.bot.logger.info("Successfully connected to Highrise!")
         self.bot._context.metrics.mark_connected()
 
         if self.bot.config.auto_fetch.room_users:
@@ -231,7 +239,7 @@ class ConnectionManager:
         self.bot.cached_users.clear()
 
     async def _handle_server_errors(self, error_data: dict) -> None:
-        error_message = error_data.get("message")
-        
+        error_message = error_data.get("message") or "Unknown server error occurred."
+    
         self.bot.logger.critical(error_message)
-        await self.logout()
+        await self.logout(hide_logs=True)

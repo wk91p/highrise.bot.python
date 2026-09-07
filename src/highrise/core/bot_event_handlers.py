@@ -21,6 +21,7 @@ def handle_session_metadata(bot: "BaseBot", data: dict[str, Any]) -> None:
     metadata = SessionMetadata._from_raw(data)
     bot._context.session_metadata = metadata
     bot._tasks.create_task(bot.on_start(metadata), "on_start")
+    bot.logger.info("Successfully connected to Highrise!")
 
 def handle_chat_event(bot: "BaseBot", data: dict[str, Any]) -> None:
     user_data = data.get("user") or {}

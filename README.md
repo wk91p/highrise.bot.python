@@ -184,9 +184,11 @@ await bot.login(room_id: str, api_token: str, auto_reconnect: bool = True) -> No
 Connects the bot to the given room and starts listening for events. This is the main entry point, everything (hooks, background loops, reconnect handling) runs from inside this call. It blocks until the bot stops running, so it's usually the last line you call, wrapped in `asyncio.run(...)`.
 
 ```python
-await bot.logout() -> None
+await bot.logout(hide_logs: bool) -> None
 ```
 Gracefully disconnects the bot and disables auto-reconnect, so `login()` stops its internal loop and returns. Use this for a clean, intentional shutdown rather than just killing the process.
+
+- `hide_logs` - Determines whether the logout progress and success messages are suppressed in the console. Set to True to keep the console clean during errors or silent shutdowns. Defaults to False, meaning standard logout messages will be visibly printed to confirm the cleanup steps.
 
 ```python
 await bot.reconnect() -> None
