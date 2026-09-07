@@ -4,7 +4,7 @@ WEBSOCKET_EVENTS = [
     'SessionMetadata', 'ChatEvent', 'UserMovedEvent', 
     'UserJoinedEvent', 'UserLeftEvent','MessageEvent', 
     'TipReactionEvent', 'RoomModeratedEvent', 'ChannelEvent',
-    'EmoteEvent', 'VoiceEvent', 'ReactionEvent'
+    'EmoteEvent', 'VoiceEvent'
 ]
 
 EVENT_HOOK_MAP: dict[str, tuple[str, ...]] = {
@@ -15,7 +15,6 @@ EVENT_HOOK_MAP: dict[str, tuple[str, ...]] = {
     "EmoteEvent": ("on_emote",),
     "TipReactionEvent": ("on_tip",),
     "MessageEvent": ("on_message",),
-    "ReactionEvent": ("on_reaction",),
     "VoiceEvent": ("on_voice_change",),
     "RoomModeratedEvent": ("on_moderate",),
     "ChannelEvent": ("on_channel",),

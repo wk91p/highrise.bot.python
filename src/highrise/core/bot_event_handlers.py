@@ -70,13 +70,6 @@ def handle_user_moved(bot: "BaseBot", data: dict[str, Any]) -> None:
 
     bot._tasks.create_task(bot.on_user_move(user, position, anchor), "on_user_move")
 
-def handle_reaction_event(bot: "BaseBot", data: dict[str, Any]) -> None:
-    user = _parse_user(data.get("sender"))
-    reaction = data.get("reaction", "")
-    receiver = _parse_user(data.get("receiver"))
-
-    bot._tasks.create_task(bot.on_reaction(user, reaction, receiver), "on_reaction")
-
 def handle_tip_reaction(bot: "BaseBot", data: dict[str, Any]) -> None:
     sender = _parse_user(data.get("sender"))
     receiver = _parse_user(data.get("receiver"))
@@ -143,7 +136,6 @@ EVENT_HANDLERS = {
     "UserJoinedEvent": handle_user_join,
     "UserLeftEvent": handle_user_leave,
     "UserMovedEvent": handle_user_moved,
-    "ReactionEvent": handle_reaction_event,
     "TipReactionEvent": handle_tip_reaction,
     "EmoteEvent": handle_emote_event,
     "MessageEvent": handle_message_event,
