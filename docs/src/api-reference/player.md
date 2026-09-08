@@ -97,6 +97,24 @@ class TipUserResponse(BaseResponse):
 ```python
 TipUserResult = Literal["success", "insufficient_funds"]
 ```
+
+### TipType
+A literal of tip types in the highrise bot websocket
+
+```python
+TipType = Literal[
+    "gold_bar_1",
+    "gold_bar_5",
+    "gold_bar_10",
+    "gold_bar_50",
+    "gold_bar_100",
+    "gold_bar_500",
+    "gold_bar_1k",
+    "gold_bar_5000",
+    "gold_bar_10k",
+]
+```
+
 ## split_tip_user()
 
 ```python

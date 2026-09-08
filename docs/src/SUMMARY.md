@@ -40,6 +40,7 @@
 - [Roles](tools-reference/roles.md)
 - [Logger](tools-reference/logger.md)
 - [LoopTask](tools-reference/loop-task.md)
+- [Utils](tools-reference/utils.md)
 
 # External Reference
 
