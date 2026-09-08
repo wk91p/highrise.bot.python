@@ -1,6 +1,6 @@
 from .bot_ws_requester import WSRequester
 from ..cache.cache import CacheManager
-from ..tools.metrics import Metrics
+from .bot_metrics import Metrics
 from ..models.websocket.highrise_models import SessionMetadata, Credentials
 
 class BotContext:
