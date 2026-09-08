@@ -38,6 +38,7 @@
   - [Grabs](tools-reference/webapi/grabs.md)
 
 - [Roles](tools-reference/roles.md)
+- [Logger](tools-reference/logger.md)
 
 # External Reference
 
