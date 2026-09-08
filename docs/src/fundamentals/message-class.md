@@ -78,6 +78,6 @@ async def on_chat(self, user, message):
         await self.highrise.chat(f"{target} warned for: {reason}")
 ```
 
-## What is next
+## What is next ?
 
 Head to [Error Handling](./errors.md) to see how validation failures and request errors actually surface in your code.

@@ -176,34 +176,30 @@ if results:
 | `max_count` | `1` | Wait for this many matching events before returning |
 | `unique` | `False` | Deduplicate matches (e.g. one per user) |
 
-## Public methods
+## BaseBot properties
 
 ```python
-await bot.login(room_id: str, api_token: str, auto_reconnect: bool = True) -> None
+bot.is_connected: bool                       # True if the WebSocket connection is currently open
+bot.is_paused: bool                          # True if event dispatch is currently paused
+bot.state: State | None                      # The raw WebSocket connection state, or None if not connected
+bot.uptime: float                            # Seconds since the current connection was established
+bot.latency: float | None                    # Round-trip time in seconds of the last keepalive, or None
+bot.events_processed: int                    # Total events processed since the current connection was established
+bot.credentials: Credentials | None          # The room_id/api_token used for this session, or None before connecting
+bot.session_metadata: SessionMetadata | None # The session metadata received once connected, or None before then
 ```
-Connects the bot to the given room and starts listening for events. This is the main entry point, everything (hooks, background loops, reconnect handling) runs from inside this call. It blocks until the bot stops running, so it's usually the last line you call, wrapped in `asyncio.run(...)`.
+
+## Connection Control
+
+Unlike the official SDK that gives you no control over the bot connection, This SDK's `BaseBot` gives you finer control over the connection lifecycle:
 
 ```python
-await bot.logout(hide_logs: bool) -> None
+await bot.login(room_id, api_token, auto_reconnect=True)    # connect and start listening
+await bot.logout()                                          # disconnect and disable auto-reconnect
+await bot.reconnect()                                       # force a fresh reconnect
+bot.pause()                                                 # stop dispatching events without disconnecting
+bot.resume()                                                # resume dispatching events
 ```
-Gracefully disconnects the bot and disables auto-reconnect, so `login()` stops its internal loop and returns. Use this for a clean, intentional shutdown rather than just killing the process.
-
-- `hide_logs` - Determines whether the logout progress and success messages are suppressed in the console. Set to True to keep the console clean during errors or silent shutdowns. Defaults to False, meaning standard logout messages will be visibly printed to confirm the cleanup steps.
-
-```python
-await bot.reconnect() -> None
-```
-Manually forces the current connection to drop, which triggers the bot's normal reconnect logic to kick in and establish a fresh connection. Useful for recovering from a stuck or laggy state without fully stopping the bot.
-
-```python
-bot.pause() -> None
-```
-Stops the bot from reacting to incoming events (`chat`, `joins`, `moves`, etc.) without disconnecting. The connection, keepalive, and reconnect logic all keep running underneath, the bot just goes quiet.
-
-```python
-bot.resume() -> None
-```
-Undoes `pause()`, the bot starts reacting to events again.
 
 ## Background Loops & Decorators
 
@@ -246,20 +242,6 @@ class MyBot(BaseBot):
 * **`start()`**: Spawns the task in the background loop. Safely ignores duplicate execution requests if already running.
 * **`cancel()`**: Gracefully terminates the running task loop.
 * **`get_loop_task`**: Property that returns the active `asyncio.Task` wrapper instance, or `None` if inactive.
-
-
-## BaseBot properties
-
-```python
-bot.is_connected: bool                       # True if the WebSocket connection is currently open
-bot.is_paused: bool                          # True if event dispatch is currently paused
-bot.state: State | None                      # The raw WebSocket connection state, or None if not connected
-bot.uptime: float                            # Seconds since the current connection was established
-bot.latency: float | None                    # Round-trip time in seconds of the last keepalive, or None
-bot.events_processed: int                    # Total events processed since the current connection was established
-bot.credentials: Credentials | None          # The room_id/api_token used for this session, or None before connecting
-bot.session_metadata: SessionMetadata | None # The session metadata received once connected, or None before then
-```
 
 ## Migrating from the official SDK
 

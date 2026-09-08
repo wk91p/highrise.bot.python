@@ -68,6 +68,6 @@ if response.has_error():
     return
 ```
 
-## What is next
+## What is next ?
 
 Head to The [Message Class](./message-class.md) to see the structure of the `message` argument your chat, whisper and direct hooks receive.

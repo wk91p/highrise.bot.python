@@ -37,15 +37,51 @@ These are useful for building things like a `!status` command, or for logging co
 
 Unlike the official SDK that gives you no control over the bot connection, This SDK's `BaseBot` gives you finer control over the connection lifecycle:
 
+### bot.login
 ```python
-await bot.login(room_id, api_token, auto_reconnect=True)    # connect and start listening
-await bot.logout()                                          # disconnect and disable auto-reconnect
-await bot.reconnect()                                       # force a fresh reconnect
-bot.pause()                                                 # stop dispatching events without disconnecting
-bot.resume()                                                # resume dispatching events
+await bot.login(room_id: str, api_token: str, auto_reconnect: bool = True)
 ```
 
-`pause()` and `resume()` are useful when you want the bot to stay connected but temporarily stop reacting, for example during a maintenance window, without dropping the socket and losing your place in the room.
+Connects the bot to the given room and starts listening for events.
+
+This is the main entry point, everything (hooks, background loops, reconnect handling) runs from inside this call. It blocks until the bot stops running, so it's usually the last line you call, wrapped in `asyncio.run(...)`.
+
+- `auto_reconnect`: Flag used internally to check if the connection loop should retry automatically after conneciton close or error.
+
+### bot.logout
+
+```python
+await bot.logout(hide_logs: bool = False)
+```
+
+Gracefully disconnects the bot and disables auto-reconnect.
+    
+This stops the internal loop of `login()` and allows it to return. 
+Use this for a clean, intentional shutdown rather than abruptly 
+killing the process.
+
+- `hide_logs`: default `False`, If `True`, suppresses the standard logout progress and success messages in the console logs.
+
+### bot.reconnect
+```python
+await bot.reconnect()
+```
+Manually forces the current connection to drop, which triggers the bot's normal reconnect logic to kick in and establish a fresh connection. Useful for recovering from a stuck or laggy state without fully stopping the bot.
+
+### bot.pause
+```python
+bot.pause()
+```
+
+Stops the bot from reacting to incoming events (`chat`, `joins`, `moves`, etc.) without disconnecting. The connection, keepalive, and reconnect logic all keep running underneath, the bot just goes quiet.
+
+### bot.resume
+```
+bot.resume()
+```
+Undoes `pause()`, the bot starts reacting to events again.
+
+`pause()` and `resume()` are useful when you want the bot to stay connected but temporarily stop reacting, for example during a maintenance window, without dropping the socket and losing conection to the websocket.
 
 ## Only subscribing to events you use
 
@@ -89,6 +125,6 @@ class MyBot(BaseBot):
 
 These patterns are useful for things like periodic announcements, scheduled cleanup, or polling external data, without managing your own `asyncio` task.
 
-## What is next
+## What is next ?
 
 Now that you know what's on the bot itself, head to [Events](./events.md) to see how the hook methods that drive it actually work.
