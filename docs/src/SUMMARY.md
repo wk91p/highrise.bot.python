@@ -37,6 +37,8 @@
   - [Posts](tools-reference/webapi/posts.md)
   - [Grabs](tools-reference/webapi/grabs.md)
 
+- [Roles](tools-reference/roles.md)
+
 # External Reference
 
 - [References](references.md)

@@ -3,6 +3,7 @@ import os
 import tempfile
 from pathlib import Path
 import atexit
+from collections.abc import Iterable
 
 class Roles:
     """Manages named roles and their assigned user ids, with auto save/load
@@ -65,11 +66,11 @@ class Roles:
         """Checks whether a user has the given role."""
         return user_id in self.roles.get(role, set())
 
-    def has_any_role(self, user_id: str, roles: list[str]) -> bool:
+    def has_any_role(self, user_id: str, roles: Iterable[str]) -> bool:
         """Checks whether a user has at least one of the given roles."""
         return any(self.has_role(user_id, role) for role in roles)
 
-    def has_all_roles(self, user_id: str, roles: list[str]) -> bool:
+    def has_all_roles(self, user_id: str, roles: Iterable[str]) -> bool:
         """Checks whether a user has every one of the given roles."""
         return all(self.has_role(user_id, role) for role in roles)
 
