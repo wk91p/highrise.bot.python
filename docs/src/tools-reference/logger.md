@@ -56,14 +56,18 @@ An integer-based enumeration (`IntEnum`) that maps directly to Python’s native
 
 Now we will explain what the main setup function does and what it returns.
 
-## `setup_logger(name: str, level: LoggerLevel, show_time: bool)`
+## setup_logger()
 Configures a console stream handler, injects custom formatting logic, clears any pre-existing duplicate handlers on that channel name, and returns the active logger instance.
 
 ```python
 from highrise import setup_logger, LoggerLevel
 
 # Setup your own standalone logger separate from the BotConfig ecosystem
-custom_logger = setup_logger(name="StandaloneLogger", level=LoggerLevel.WARNING)
+custom_logger = setup_logger(
+    name="StandaloneLogger", 
+    level=LoggerLevel.WARNING, 
+    show_time=True
+)
 
 custom_logger.warning("Standalone warning event captured.")
 ```

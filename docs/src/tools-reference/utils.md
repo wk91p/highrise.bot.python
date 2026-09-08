@@ -6,7 +6,7 @@
 
 Now we will explain what each helper method inside `Utils` does and what it returns.
 
-## `split_tip(amount: int)`
+## split_tip()
 Decomposes a total gold currency amount into a list of the largest possible valid tip tiers using a greedy algorithm.
 
 ```python
@@ -20,7 +20,7 @@ tips = Utils.split_tip(550)
 
 - Check [`TipType`](../api-reference/player.md#tiptype)
 
-## `format_time(seconds: float)`
+## format_time()
 Formats a raw duration in seconds into a clean, comma-separated human-readable string.
 
 ```python

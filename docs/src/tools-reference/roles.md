@@ -59,7 +59,7 @@ roles_manager = Roles(path=Path("/var/data/roles.json"))
 
 Now we will explain what each method inside `Roles` do and what it returns.
 
-## `add_role(role: str, user_id: str)`
+## add_role()
 Adds a role if it does not exist, then assigns it to the given user.
 
 ```python
@@ -77,7 +77,7 @@ bot.roles.remove_role("vip", "user_12345")
 ```
 * **Returns**: `None`
 
-## `has_role(user_id: str, role: str)`
+## has_role()
 Checks whether a user has the given role.
 
 ```python
@@ -88,7 +88,7 @@ if has_vip:
 ```
 * **Returns**: `bool`
 
-## `has_any_role(user_id: str, roles: list[str])`
+## has_any_role()
 Checks whether a user has at least one of the roles in the provided list.
 
 ```python
@@ -99,7 +99,7 @@ if has_any_role:
 ```
 * **Returns**: `bool`
 
-## `has_all_roles(user_id: str, roles: list[str])`
+## has_all_roles()
 Checks whether a user has every single role in the provided list.
 
 ```python
@@ -110,7 +110,7 @@ if has_all_roles:
 ```
 * **Returns**: `bool`
 
-## `get_roles(user_id: str)`
+## get_roles()
 Retrieves all roles currently assigned to a specific user.
 
 ```python
@@ -119,7 +119,7 @@ user_roles = bot.roles.get_roles("user_12345")
 ```
 * **Returns**: `list[str]`
 
-## `get_users(role: str)`
+## get_users()
 Retrieves all user IDs assigned to a specific role.
 
 ```python
@@ -128,7 +128,7 @@ mod_list = bot.roles.get_users("mod")
 ```
 * **Returns**: `list[str]`
 
-## `is_mod(user_id: str)`
+## is_mod()
 A convenience method to check if a user has the `mod` role.
 
 ```python
@@ -139,7 +139,7 @@ if is_mod:
 ```
 * **Returns**: `bool`
 
-## `is_owner(user_id: str)`
+## is_owner()
 A convenience method to check if a user has the `owner` role.
 
 ```python
@@ -150,7 +150,7 @@ if is_owner:
 ```
 * **Returns**: `bool`
 
-## `delete_role(role: str)`
+## delete_role()
 Deletes an entire role from the system, automatically removing all users assigned to it.
 
 ```python
@@ -159,7 +159,7 @@ bot.roles.delete_role("vip")
 ```
 * **Returns**: `None`
 
-## `list_roles()`
+## list_roles()
 Retrieves the names of all defined roles.
 
 ```python
@@ -168,7 +168,7 @@ all_roles = bot.roles.list_roles()
 ```
 * **Returns**: `list[str]`
 
-## `save()`
+## save()
 Manually forces an atomic save of all current roles data to the JSON file.
 
 ```python
