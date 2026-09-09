@@ -30,22 +30,7 @@ There's no separate exception-handling path to write. Whether the request failed
 
 Internally, every SDK method builds its checks from a shared `Validator`. It's chainable, each check returns itself, so several checks can run in one expression, and any failed check becomes the message you'll see in `response.error`.
 
-```python
-from highrise import Validator
-
-Validator.required(message, "message").string(message, "message")
-```
-
-You won't normally call `Validator` directly in normal bot code because it raise a `ValueError`, but it's worth knowing what it enforces, since these are the errors you'll see surfaced:
-
-### Methods
-
-- **Type checks**: `string`, `number`, `integer`, `boolean`, `array`, `object`, `callable`, `instance_of`
-- **Presence and shape**: `required`, `non_empty_array`, `min_length`, `max_length`, `max_items`
-- **Value constraints**: `range`, `one_of`, `positive`, `non_negative`, `match` (regex)
-- **Compound checks**: `is_coordinates(x, y, z, facing)` for movement, `is_anchor(entity_id, anchor_ix)` for anchor positions
-
-Every message names exactly which field failed and why, for example `"message must be a non-empty string"` or `"facing must be one of: ..."`.
+see [Validator](../tools-reference/validator.md) in Tools Reference for the full method list.
 
 ## A safe command pattern
 
@@ -66,7 +51,3 @@ async def on_chat(self, user, message):
 ```
 
 One check, `response.has_error()`, covers bad input and server-side failures alike.
-
-## What is next ?
-
-That covers Fundamentals. You now know how the bot is built, how it reacts to events, how requests and responses work, how messages get parsed, and how errors surface. Head to [API Reference](../api-reference/chat.md) for the full method-by-method breakdown of `self.highrise`.

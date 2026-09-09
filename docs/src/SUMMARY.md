@@ -37,10 +37,11 @@
   - [Posts](tools-reference/webapi/posts.md)
   - [Grabs](tools-reference/webapi/grabs.md)
 
-- [Roles](tools-reference/roles.md)
-- [Logger](tools-reference/logger.md)
-- [LoopTask](tools-reference/loop-task.md)
 - [Utils](tools-reference/utils.md)
+- [Logger](tools-reference/logger.md)
+- [Validator](tools-reference/validator.md)
+- [LoopTask](tools-reference/loop-task.md)
+- [Roles](tools-reference/roles.md)
 - [Command Handler](tools-reference/command-handler.md)
 
 # External Reference
