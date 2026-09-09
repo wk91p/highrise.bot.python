@@ -44,6 +44,10 @@
 - [Roles](tools-reference/roles.md)
 - [Command Handler](tools-reference/command-handler.md)
 
+# Migration Guide
+
+- [Migrating from the Official SDK](migration.md)
+
 # External Reference
 
 - [References](references.md)
