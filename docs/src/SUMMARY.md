@@ -41,6 +41,7 @@
 - [Logger](tools-reference/logger.md)
 - [LoopTask](tools-reference/loop-task.md)
 - [Utils](tools-reference/utils.md)
+- [Command Handler](tools-reference/command-handler.md)
 
 # External Reference
 
